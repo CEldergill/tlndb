@@ -1,0 +1,93 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Carousel Styling */
+.carousel-item {
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Individual Background Images */
+.carousel-item:nth-child(1) {
+    background-image: url("assets/fv4.png");
+}
+
+.carousel-item:nth-child(2) {
+    background-image: url("assets/sc3.png");
+}
+
+.carousel-item:nth-child(3) {
+    background-image: url("assets/salem3.png");
+}
+
+.carousel-item:nth-child(4) {
+    background-image: url("assets/fp3.png");
+}
+
+.content-container {
+    z-index: 2;
+}
+
+/* Login Box Styling */
+.cover-page {
+    background: rgba(255, 255, 255, 0.85);
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+}
+
+/* Error Message Box */
+.error-message {
+    background-color: rgba(255, 0, 0, 0.1);
+    color: red;
+    border: 1px solid red;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+/* Title Styling */
+.title {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    margin-bottom: 20px;
+}
+
+/* Selection Button Styling */
+.selection-button {
+    width: 100%;
+    height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    margin: 0 10px;
+    filter: grayscale(100%);
+    /* Grayscale filter for initial state */
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.button1 {
+    background-image: url('assets/nbn.png');
+}
+
+.button2 {
+    background-image: url('assets/wcn.png');
+}
+
+/* Active state for selected button */
+.active {
+    transform: scale(1.1);
+    /* Enlarge the selected button */
+}
+
+/* Disable Login Button by default */
+#loginButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
