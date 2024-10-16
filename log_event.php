@@ -4,15 +4,25 @@ $activePage = 'log_event';
 require 'includes/token_manager.php';
 require 'includes/db.php';
 
+$client_secret = getenv('CLIENT_SECRET');
+$client_id = getenv('CLIENT_ID');
+
 if (isset($_SESSION['access']['expiry']) && time() >= ($_SESSION['access']['expiry'] - 300)) {
-    if (!refreshAccessToken()) {
+    if (!refreshAccessToken($client_id, $client_secret)) {
         $_SESSION['error'] = "Error: Unable to refresh access token.";
         header("Location: index.php");
         exit();
     }
 }
 
-#data
+// Array Declaration
+
+$attendeesArray = [];
+$cohostArray = [];
+$eventTypesArray = [];
+
+
+// Data
 $token = $_SESSION['access']['token'];
 $user = $_SESSION['user'];
 $selected_navy = $user['selected_navy'];
@@ -93,7 +103,12 @@ if ($event_types_result) {
 
     <div class="container mt-5">
         <h2>Create Event</h2>
-        <form>
+        <form method="POST" action="test.php">
+
+            <!-- Form Inputs for ID and Faction -->
+            <input type="hidden" id="userid" name="userid" value=<?php echo $id ?>>
+            <input type="hidden" id="factionid" name="factionid" value=<?php echo $faction_id ?>>
+
             <!-- Host Section -->
             <div class="row mb-3">
                 <div class="col-md-3">
@@ -105,6 +120,9 @@ if ($event_types_result) {
                         </div>
                     </div>
                 </div>
+
+                <!-- Form Input for Username of Host -->
+                <input type="hidden" id="host" name="host" value=<?php echo $userName ?>>
 
                 <!-- Co-host Section -->
                 <div class="col-md-3">
@@ -118,6 +136,10 @@ if ($event_types_result) {
             <button type="button" class="btn btn-dark mb-3" data-bs-toggle="modal" data-bs-target="#coHostModal">
                 Select Co-host
             </button>
+
+            <!-- Co Host input in selected card -->
+
+
             <!-- Co-host Modal -->
             <div class="modal fade" id="coHostModal" tabindex="-1" aria-labelledby="coHostModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl" style="width: 80%; height: 80%;">
@@ -167,6 +189,9 @@ if ($event_types_result) {
                 </div>
             </section>
 
+            <!-- Hidden input for selected event type -->
+            <input type="hidden" id="eventType" name="eventType" value="">
+
 
             <!-- Start and End Time Section -->
             <div class="row mb-3">
@@ -178,13 +203,6 @@ if ($event_types_result) {
                     <label for="endTime" class="form-label">Event End Time</label>
                     <input type="time" class="form-control" id="endTime" required>
                 </div>
-            </div>
-
-            <!-- Attendees Section -->
-            <div class="mb-3">
-                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#attendeesModal">
-                    Select Attendees
-                </button>
             </div>
 
             <!-- Attendees Modal -->
@@ -205,7 +223,7 @@ if ($event_types_result) {
                                 <?php foreach ($attendeesArray as $attendee): ?>
                                     <div class="col-1 mb-3 attendee-card" data-username="<?php echo strtolower($attendee[1]); ?>">
                                         <div class="card attendee-card-inner" style="cursor:pointer;"
-                                            onclick="selectAttendee('<?php echo $attendee[1]; ?>', '<?php echo $attendee[2]; ?>')">
+                                            onclick="selectAttendee('<?php echo $attendee[1]; ?>', '<?php echo $attendee[0]; ?>', '<?php echo $attendee[2]; ?>')">
                                             <img src="<?php echo $attendee[2]; ?>" class="card-img-top" alt="Attendee Image">
                                             <div class="card-body text-center">
                                                 <h5 class="card-title"><?php echo $attendee[1]; ?></h5>
@@ -224,22 +242,36 @@ if ($event_types_result) {
                     </div>
                 </div>
             </div>
+
             <!-- Selected Attendees Display -->
             <div id="selectedAttendeesContainer" class="mt-3" style="display:none;">
                 <h4>Selected Attendees:</h4>
                 <div class="row" id="selectedAttendees"></div>
             </div>
 
+
+            <!-- Selected Attendees Button -->
+            <div class="my-3">
+                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#attendeesModal">
+                    Select Attendees
+                </button>
+            </div>
+
+            <!-- Hidden input for selected attendees -->
+            <input type="hidden" id="selectedAttendeesInput" name="selectedAttendees" value="">
+
+
             <!-- Notes Section -->
             <div class="mb-3">
                 <label for="notes" class="form-label">Notes</label>
-                <textarea class="form-control" id="notes" rows="3" placeholder="Enter any notes here..."></textarea>
+                <textarea class="form-control" id="notes" rows="3" placeholder="Enter any notes here..." required></textarea>
             </div>
 
             <!-- Submit Button -->
             <div class="text-center">
-                <button type="submit" class="btn btn-dark mb-5">Submit</button>
+                <button type="button" id="submitEventForm" class="btn btn-dark mb-5">Submit</button>
             </div>
+
         </form>
     </div>
 
@@ -254,22 +286,6 @@ if ($event_types_result) {
             });
         });
 
-        // Multi-select attendees
-        function selectAttendee(attendee) {
-            const index = selectedAttendees.indexOf(attendee);
-            if (index === -1) {
-                // If the attendee is not already selected, add to the list
-                selectedAttendees.push(attendee);
-                // Mark the attendee as selected (show checkmark)
-                $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').show();
-            } else {
-                // If the attendee is already selected, remove from the list
-                selectedAttendees.splice(index, 1);
-                // Unmark the attendee (hide checkmark)
-                $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').hide();
-            }
-        }
-
         // Done button logic
         $('#doneSelectingAttendees').on('click', function() {
             $('#attendeesModal').modal('hide');
@@ -281,20 +297,80 @@ if ($event_types_result) {
             // Display the co-host card when selected
             document.getElementById('coHostCard').style.display = 'block';
             document.getElementById('coHostCard').innerHTML = `
-        <div class="card" style="width: 15rem;">
-            <img src="${imgSrc}" class="card-img-top" alt="Co-host Image">
-            <div class="card-body text-center">
-                <h5 class="card-title">Co-host: ${coHost}</h5>
-                <p class="card-text">${rank}</p>
+            <div class="card" style="width: 15rem;">
+                <img src="${imgSrc}" class="card-img-top" alt="Co-host Image">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Co-host: ${coHost}</h5>
+                    <p class="card-text">${rank}</p>
+                </div>
             </div>
-        </div>`;
+            <input type="hidden" id="cohost" name="cohost" value=${coHost}>`;
             $('#coHostModal').modal('hide'); // Close modal after selection
         }
+
+        // Function to handle attendee selection
+        function selectAttendee(attendee, rank, imgSrc) {
+            const index = selectedAttendees.findIndex(att => att.username === attendee);
+
+            if (index === -1) {
+                // Add attendee if not already selected
+                selectedAttendees.push({
+                    username: attendee,
+                    rank: rank,
+                    image: imgSrc
+                });
+                $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').show();
+            } else {
+                // Remove attendee if already selected
+                selectedAttendees.splice(index, 1);
+                $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').hide();
+            }
+
+            // Update hidden input with selected attendees
+            updateSelectedAttendeesInput();
+        }
+
+        // Function to update the hidden input with selected attendees
+        function updateSelectedAttendeesInput() {
+            // Extract usernames from the selected attendees array
+            const attendeeUsernames = selectedAttendees.map(att => att.username);
+
+            // Convert to JSON string format (e.g., ["username1", "username2"])
+            document.getElementById('selectedAttendeesInput').value = JSON.stringify(attendeeUsernames);
+        }
+
+        // Event listener to display selected attendees on modal close
+        $('#doneSelectingAttendees').on('click', function() {
+            $('#attendeesModal').modal('hide');
+            const attendeesContainer = document.getElementById('selectedAttendees');
+            attendeesContainer.innerHTML = ''; // Clear current attendees
+            updateSelectedAttendeesInput();
+
+            if (selectedAttendees.length > 0) {
+                document.getElementById('selectedAttendeesContainer').style.display = 'block';
+
+                selectedAttendees.forEach(attendee => {
+                    attendeesContainer.innerHTML += `
+            <div class="col-2">
+                <div class="card">
+                    <img src="` + attendee.image + `" class="card-img-top" alt="${attendee.username}">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">` + attendee.username + `</h5>
+                        <p class="card-text">` + attendee.rank + `</p>
+                    </div>
+                </div>
+            </div>`;
+                });
+            } else {
+                document.getElementById('selectedAttendeesContainer').style.display = 'none';
+            }
+        });
 
 
         // Event Type logic
         document.addEventListener('DOMContentLoaded', function() {
             const eventCards = document.querySelectorAll('.event-type-card');
+            const eventTypeInput = document.getElementById('eventType'); // Get the hidden input
 
             eventCards.forEach(card => {
                 card.addEventListener('click', function() {
@@ -309,53 +385,67 @@ if ($event_types_result) {
                     this.classList.add('selected');
                     const checkmark = this.querySelector('.checkmark');
                     checkmark.style.display = 'inline-block';
+
+                    // Set the hidden input value to the selected event type
+                    const selectedEventType = this.getAttribute('data-event-type');
+                    eventTypeInput.value = selectedEventType;
                 });
             });
         });
 
+        // Validation Logic
+        document.getElementById('submitEventForm').addEventListener('click', function() {
+            const selectedEventType = document.getElementById('eventType').value;
+            const selectedAttendeesInput = document.getElementById('selectedAttendeesInput').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+            const notes = document.getElementById('notes').value;
 
-
-        // Selected attendees
-        var selectedAttendees = [];
-
-        function selectAttendee(attendee, imgSrc) {
-            const index = selectedAttendees.findIndex(att => att.username === attendee);
-            if (index === -1) {
-                selectedAttendees.push({
-                    username: attendee,
-                    image: imgSrc
-                });
-                $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').show();
-            } else {
-                selectedAttendees.splice(index, 1);
-                $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').hide();
+            // Check if an event type is selected
+            if (!selectedEventType) {
+                alert("Please select an event type.");
+                return;
             }
-        }
 
-
-        // Handle "Done" button and display selected attendees
-        $('#doneSelectingAttendees').on('click', function() {
-            $('#attendeesModal').modal('hide');
-            const attendeesContainer = document.getElementById('selectedAttendees');
-            attendeesContainer.innerHTML = ''; // Clear current attendees
-
-            if (selectedAttendees.length > 0) {
-                document.getElementById('selectedAttendeesContainer').style.display = 'block';
-
-                selectedAttendees.forEach(attendee => {
-                    attendeesContainer.innerHTML += `
-    <div class="col-2">
-        <div class="card">
-            <img src="` + attendee.image + `" class="card-img-top" alt="${attendee.username}">
-            <div class="card-body text-center">
-                <h5 class="card-title">` + attendee.username + `</h5>
-            </div>
-        </div>
-    </div>`;
-                });
-            } else {
-                document.getElementById('selectedAttendeesContainer').style.display = 'none';
+            // Check if there are selected attendees and parse them if they exist
+            let selectedAttendees = [];
+            if (selectedAttendeesInput) {
+                try {
+                    selectedAttendees = JSON.parse(selectedAttendeesInput);
+                } catch (e) {
+                    console.error("Error parsing selected attendees:", e);
+                    alert("There was an error with the selected attendees. Please try again.");
+                    return;
+                }
             }
+
+            if (!startTime) {
+                alert("Please enter a start time for the event.");
+                return;
+            }
+
+            if (!endTime) {
+                alert("Please enter an end time for the event.");
+                return;
+            }
+
+            if (!selectedAttendees || selectedAttendees.length < 3) {
+                alert("Please select at least 3 attendees.");
+                return;
+            }
+
+            if (!notes) {
+                alert("Please enter notes for the event.");
+                return;
+            }
+
+            // If validation passes, submit the form
+            document.querySelector('form').submit();
+
+            // Reset the form after successful submission
+            alert("Event form submitted successfully!");
+            //window.location.href = 'log_event.php'
+            //resetForm();
         });
     </script>
 

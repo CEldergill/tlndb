@@ -1,103 +1,72 @@
+:root {
+    --modal-width-large: 80%;
+    --modal-height-large: 80%;
+    --modal-body-max-height: 90%;
+    --card-transition: transform 0.2s;
+    --selected-border-color: #007bff;
+}
+
 .form-control[readonly] {
     background-color: #e9ecef;
 }
 
 #attendeesModal .modal-dialog {
-    width: 80%; /* Ensure modal takes 80% of the screen horizontally */
-    height: 80%; /* Ensure modal takes 80% of the screen vertically */
-    max-width: 80%;
-    max-height: 80%;
+    width: var(--modal-width-large);
+    height: var(--modal-height-large);
+    max-width: var(--modal-width-large);
+    max-height: var(--modal-height-large);
 }
 
 #attendeesModal .modal-content {
-    height: 100%; /* Ensure the modal content fills the modal */
+    height: 100%;
 }
 
 #attendeesModal .modal-body {
-    max-height: 90%; /* Modal body height to accommodate scrolling */
-    overflow-y: auto; /* Enable scrolling */
+    max-height: var(--modal-body-max-height);
+    overflow-y: auto;
 }
 
 @media (max-width: 576px) {
     #attendeesModal .modal-dialog {
-        width: 100%; /* Full width on small devices */
-        height: 90%; /* Slightly smaller height on small devices */
+        width: 100%;
+        height: 90%;
     }
 
     #attendeesModal .modal-body {
-        max-height: 400px; /* Limit modal body height on small screens */
+        max-height: 400px;
     }
 }
 
-/* Optional adjustments for medium devices */
 @media (min-width: 576px) and (max-width: 768px) {
     #attendeesModal .modal-dialog {
-        width: 90%; /* Adjust modal width for medium devices */
-        height: 85%; /* Adjust modal height for medium devices */
+        width: 90%;
+        height: 85%;
     }
 }
 
-/* Card styling */
-.card {
+.card, #attendeesModal .card {
     cursor: pointer;
-    transition: transform 0.2s; /* Hover effect */
+    transition: var(--card-transition);
 }
 
-.card:hover {
-    transform: scale(1.05); /* Scale up slightly on hover */
-}
-
-#attendeesModal .card {
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-#attendeesModal .card:hover {
+.card:hover, #attendeesModal .card:hover {
     transform: scale(1.05);
 }
 
-#attendeesModal .checkmark {
-    font-size: 1.5rem;
-    color: green;
-    position: absolute;
-    top: 5px;
-    right: 10px;
-}
-
-/* Adjust grid for smaller cards */
 .attendee-card {
-    position: relative; /* Ensure checkmark is positioned inside card */
-}
-
-@media (min-width: 768px) {
-    .attendee-card {
-        width: 16.66%; /* Display 6 cards per row */
-    }
-}
-/* Attendees display on the main form */
-#selectedAttendeesContainer {
-    border: 1px solid #ddd;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-}
-
-#selectedAttendees .card {
-    width: 100%;
-    max-width: 12rem;
-    margin: 0 auto;
-}
-.event-type-card {
-    transition: border 0.3s, box-shadow 0.3s;
+    position: relative;
 }
 
 .event-type-card.selected .card {
-    border: 2px solid #007bff; /* Change this to your preferred color */
+    border: 2px solid var(--selected-border-color);
     box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
 }
-
-.event-type-card.selected .checkmark {
-    display: inline-block;
+.event-type-card::after {
+    content: '*';
+    color: red;
+    display: none;
 }
 
-
+.event-type-card.selected::after {
+    display: none; /* Hide asterisk if selected */
+}

@@ -1,5 +1,5 @@
 <?php
-$client_id = '1854563944239145674';
+$client_id = getenv('CLIENT_ID');
 $redirect_uri = 'http://localhost:80/callback.php';
 $state = bin2hex(random_bytes(16)); // CSRF protection
 

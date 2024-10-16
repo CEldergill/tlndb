@@ -1,12 +1,15 @@
 <?php
-function refreshAccessToken()
+
+function refreshAccessToken($client_id, $client_secret)
 {
     if (isset($_COOKIE['refresh_token'])) {
-        $refresh_token = $_COOKIE['refresh_token'];
 
+        $refresh_token = $_COOKIE['refresh_token'];
         // Obtain a new access token
         $token_url = "https://apis.roblox.com/oauth/v1/token";
         $post_data = [
+            'client_id' => $client_id,
+            'client_secret' => $client_secret,
             'refresh_token' => $refresh_token,
             'grant_type' => 'refresh_token'
         ];
@@ -25,13 +28,16 @@ function refreshAccessToken()
             $_SESSION['access']['token'] = $response_data['access_token'];
             $_SESSION['access']['expiry'] = time() + $response_data['expires_in'];
 
+            $refresh_token = $response_data['refresh_token'];
+
             // Update refresh token
-            setcookie('refresh_token', $response_data['refresh_token'], [
+            setcookie('refresh_token', $refresh_token, [
                 'expires' => time() + (7 * 24 * 60 * 60), // 7 days
                 'path' => '/',
-                'secure' => true,
+                'domain' => '',
+                'secure' => false,
                 'httponly' => true,
-                'samesite' => 'Strict'
+                'samesite' => 'Lax'
             ]);
             return true;
         } else {

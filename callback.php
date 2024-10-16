@@ -2,14 +2,12 @@
 
 session_start();
 
-$client_id = '1854563944239145674';
-$client_secret = 'RBX-8s1SHrwIDkGtkZnYp6rahrYP_w_9l_TWaKuKCX_7pLQq6cVxuhRrtZNDmqlaDRCM';
+$client_secret = getenv('CLIENT_SECRET');
+$client_id = getenv('CLIENT_ID');
 $redirect_uri = 'http://localhost:80/callback.php';
 
 if (isset($_GET['code'])) {
     $code = $_GET['code'];
-
-    // Exchange Authorization Code for Access Token
     $token_url = "https://apis.roblox.com/oauth/v1/token";
     $post_data = [
         'client_id' => $client_id,
@@ -40,11 +38,11 @@ if (isset($_GET['code'])) {
         $refresh_token = $response_data['refresh_token'];
         setcookie('refresh_token', $refresh_token, [
             'expires' => time() + (7 * 24 * 60 * 60), // 7 days
-            'path' => '/', // Available across the entire domain
-            'domain' => '', // Set your domain here if needed
-            'secure' => true, // Only send over HTTPS
-            'httponly' => true, // Inaccessible to JavaScript
-            'samesite' => 'Strict' // Helps prevent CSRF
+            'path' => '/',
+            'domain' => '',
+            'secure' => false,
+            'httponly' => true,
+            'samesite' => 'Lax'
         ]);
 
         // Use Access Token to Get User Info
