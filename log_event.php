@@ -15,6 +15,12 @@ if (isset($_SESSION['access']['expiry']) && time() >= ($_SESSION['access']['expi
     }
 }
 
+// HTML Echo to prevent XSS
+function safeEcho($string)
+{
+    echo htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+}
+
 // Array Declaration
 
 $attendeesArray = [];
@@ -37,15 +43,27 @@ if ($selected_navy === "NBN") {
     $faction_id = 2;
 }
 
+// Default Times:
+
+date_default_timezone_set('America/New_York');
+
+$defaultEndTime = date('H:i'); // current time in HH:MM format
+
+// Prepared Statements to mitigate SQL Injection
+
 // SQL For Users
 
 $sql = "SELECT m.username, r.name, m.image_link
         FROM members AS m 
         JOIN rank AS r ON m.rank_id = r.id 
-        WHERE m.faction_id = $faction_id
+        WHERE m.faction_id = ?
         ORDER BY r.id Desc";
 
-$all_users_result = $conn->query($sql);
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $faction_id); // "i" indicates an integer
+$stmt->execute();
+$all_users_result = $stmt->get_result();
+
 
 if ($all_users_result) {
     while ($row = mysqli_fetch_assoc($all_users_result)) {
@@ -58,9 +76,12 @@ if ($all_users_result) {
 $sql = "SELECT m.username, r.name, m.image_link
         FROM members AS m 
         JOIN rank AS r ON m.rank_id = r.id 
-        WHERE m.faction_id = $faction_id AND m.rank_id > 8";
+        WHERE m.faction_id = ? AND m.rank_id > 8";
 
-$cohost_result = $conn->query($sql);
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $faction_id);
+$stmt->execute();
+$cohost_result = $stmt->get_result();
 
 if ($cohost_result) {
     while ($row = mysqli_fetch_assoc($cohost_result)) {
@@ -90,10 +111,12 @@ if ($event_types_result) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $selected_navy ?> Event Log</title>
+    <title><?php safeEcho($selected_navy); ?> Event Log</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
+
 
     <link rel="stylesheet" href="log_event.css">
 </head>
@@ -102,43 +125,42 @@ if ($event_types_result) {
     <?php include_once("components/nav.php"); ?>
 
     <div class="container mt-5">
-        <h2>Create Event</h2>
+        <h1 class="text-center display-1">Create Event</h1>
+        <hr>
         <form method="POST" action="test.php">
 
             <!-- Form Inputs for ID and Faction -->
-            <input type="hidden" id="userid" name="userid" value=<?php echo $id ?>>
-            <input type="hidden" id="factionid" name="factionid" value=<?php echo $faction_id ?>>
+            <input type="hidden" id="userid" name="userid" value=<?php safeEcho($id); ?>>
+            <input type="hidden" id="factionid" name="factionid" value=<?php safeEcho($faction_id); ?>>
 
             <!-- Host Section -->
             <div class="row mb-3">
-                <div class="col-md-3">
-                    <div class="card" style="width: 15rem;">
+                <div class="col-md-3 d-flex flex-column align-items-center">
+                    <div class="card" style="width: 16rem; height: 22rem;">
                         <img src="<?php echo $user['picture']; ?>" class="card-img-top" alt="Host Image">
                         <div class="card-body text-center">
-                            <h5 class="card-title">Host: <?php echo $userName; ?></h5>
-                            <p class="card-text"><?php echo $rank; ?></p>
+                            <h5 class="card-title">Host: <?php safeEcho($userName); ?></h5>
+                            <p class="card-text"><?php safeEcho($rank); ?></p>
                         </div>
                     </div>
+                    <button type="button" class="btn btn-dark btn-lg my-3" data-bs-toggle="modal" data-bs-target="#coHostModal">
+                        Select Co-host
+                    </button>
                 </div>
 
                 <!-- Form Input for Username of Host -->
-                <input type="hidden" id="host" name="host" value=<?php echo $userName ?>>
+                <input type="hidden" id="host" name="host" value=<?php safeEcho($userName); ?>>
 
                 <!-- Co-host Section -->
                 <div class="col-md-3">
                     <div class="d-flex justify-content-end">
                     </div>
-                    <div id="coHostCard" class="" style="display:none;">
+                    <div id="coHostCard" class="d-flex flex-column align-items-center" style="display:none;">
                         <!-- Placeholder for co-host card -->
                     </div>
                 </div>
+                <input type="file" id="screenshotInput" accept="image/*">
             </div>
-            <button type="button" class="btn btn-dark mb-3" data-bs-toggle="modal" data-bs-target="#coHostModal">
-                Select Co-host
-            </button>
-
-            <!-- Co Host input in selected card -->
-
 
             <!-- Co-host Modal -->
             <div class="modal fade" id="coHostModal" tabindex="-1" aria-labelledby="coHostModalLabel" aria-hidden="true">
@@ -151,13 +173,13 @@ if ($event_types_result) {
                         <div class="modal-body" style="height: 90%; overflow-y: auto;">
                             <div class="row">
                                 <?php foreach ($cohostArray as $coHost): ?>
-                                    <div class="col-3 mb-3" data-username="<?php echo strtolower($coHost[1]); ?>">
-                                        <div class="card attendee-card-inner" style="cursor:pointer;"
-                                            onclick="selectCoHost('<?php echo $coHost[1]; ?>','<?php echo $coHost[0]; ?>', '<?php echo $coHost[2]; ?>')">
-                                            <img src="<?php echo $coHost[2]; ?>" class="card-img-top" alt="Co-host Image">
+                                    <div class="col-12 col-sm-6 col-lg-3 mb-3" data-username="<?php safeEcho(strtolower($coHost[1])); ?>">
+                                        <div class="card" style="cursor:pointer;"
+                                            onclick="selectCoHost('<?php safeEcho($coHost[1]); ?>','<?php safeEcho($coHost[0]); ?>', '<?php safeEcho($coHost[2]); ?>')">
+                                            <img src="<?php safeEcho($coHost[2]); ?>" class="card-img-top" alt="Co-host Image">
                                             <div class="card-body text-center">
-                                                <h5 class="card-title"><?php echo $coHost[1]; ?></h5>
-                                                <p class="card-text"><?php echo $coHost[0]; ?></p>
+                                                <h5 class="card-title"><?php safeEcho($coHost[1]); ?></h5>
+                                                <p class="card-text"><?php safeEcho($coHost[0]); ?></p>
                                                 <span class="checkmark" style="display:none;">✔️</span>
                                             </div>
                                         </div>
@@ -172,15 +194,15 @@ if ($event_types_result) {
 
             <!-- Event Type Section -->
             <section id="eventTypeSection" class="container mt-2">
-                <div class="header">
-                    <h5 class="section-title">Select Event Type</h5>
+                <div class="header text-center">
+                    <h4 class="section-title">Select Event Type</h4>
                 </div>
-                <div class="row">
+                <div class="row mb-2">
                     <?php foreach ($eventTypesArray as $events): ?>
-                        <div class="col-3 mb-3 event-type-card" data-event-type="<?php echo strtolower($events); ?>">
-                            <div class="card attendee-card-inner" style="cursor:pointer;">
+                        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3 event-type-card" data-event-type="<?php safeEcho(strtolower($events)); ?>">
+                            <div class="card event-card-inner" style="cursor:pointer;">
                                 <div class="card-body text-center">
-                                    <h5 class="card-title"><?php echo $events; ?></h5>
+                                    <h5 class="card-title"><?php safeEcho($events); ?></h5>
                                     <span class="checkmark" style="display:none;">✔️</span>
                                 </div>
                             </div>
@@ -194,15 +216,16 @@ if ($event_types_result) {
 
 
             <!-- Start and End Time Section -->
-            <div class="row mb-3">
+            <div class="row mb-3 text-center">
                 <div class="col-md-6">
                     <label for="startTime" class="form-label">Event Start Time</label>
-                    <input type="time" class="form-control" id="startTime" required>
+                    <input type="time" class="form-control" id="startTime" name="startTime" required>
                 </div>
                 <div class="col-md-6">
                     <label for="endTime" class="form-label">Event End Time</label>
-                    <input type="time" class="form-control" id="endTime" required>
+                    <input type="time" class="form-control" id="endTime" name="endTime" value="<?php safeEcho($defaultEndTime); ?>" required>
                 </div>
+                <small class="text-muted mt-1" id="currentTime">All Events are logged in Eastern Time. The current time is <?php safeEcho($defaultEndTime); ?>.</small>
             </div>
 
             <!-- Attendees Modal -->
@@ -221,13 +244,13 @@ if ($event_types_result) {
                             <!-- Attendees Cards -->
                             <div class="row" id="attendeeCards">
                                 <?php foreach ($attendeesArray as $attendee): ?>
-                                    <div class="col-1 mb-3 attendee-card" data-username="<?php echo strtolower($attendee[1]); ?>">
+                                    <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-2 attendee-card" data-username="<?php safeEcho(strtolower($attendee[1])); ?>">
                                         <div class="card attendee-card-inner" style="cursor:pointer;"
-                                            onclick="selectAttendee('<?php echo $attendee[1]; ?>', '<?php echo $attendee[0]; ?>', '<?php echo $attendee[2]; ?>')">
-                                            <img src="<?php echo $attendee[2]; ?>" class="card-img-top" alt="Attendee Image">
+                                            onclick="selectAttendee('<?php safeEcho($attendee[1]); ?>', '<?php safeEcho($attendee[0]); ?>', '<?php safeEcho($attendee[2]); ?>')">
+                                            <img src="<?php safeEcho($attendee[2]); ?>" class="card-img-top" alt="Attendee Image">
                                             <div class="card-body text-center">
-                                                <h5 class="card-title"><?php echo $attendee[1]; ?></h5>
-                                                <p class="card-text"><?php echo $attendee[0]; ?></p>
+                                                <h5 class="card-title"><?php safeEcho($attendee[1]); ?></h5>
+                                                <p class="card-text"><?php safeEcho($attendee[0]); ?></p>
                                                 <span class="checkmark" style="display:none;">✔️</span> <!-- Checkmark for selected users -->
                                             </div>
                                         </div>
@@ -244,32 +267,38 @@ if ($event_types_result) {
             </div>
 
             <!-- Selected Attendees Display -->
-            <div id="selectedAttendeesContainer" class="mt-3" style="display:none;">
+            <div class="text-center mt-3" id="selectedAttendeesContainer" class="mt-3" style="display:none;">
                 <h4>Selected Attendees:</h4>
-                <div class="row" id="selectedAttendees"></div>
+                <div class="row justify-content-center" id="selectedAttendees">
+                    <!-- Placeholder for selected attendee cards -->
+                </div>
+                <small class="text-muted mt-1">Click on the attendee card to remove them.</small>
             </div>
 
 
-            <!-- Selected Attendees Button -->
-            <div class="my-3">
-                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#attendeesModal">
+            <!-- Select Attendees Button -->
+            <div class="my-3 text-center">
+                <button type="button" class="btn btn-dark btn-lg" data-bs-toggle="modal" data-bs-target="#attendeesModal">
                     Select Attendees
                 </button>
             </div>
 
             <!-- Hidden input for selected attendees -->
-            <input type="hidden" id="selectedAttendeesInput" name="selectedAttendees" value="">
+            <input type="hidden" id="selectedAttendeesInput" name="selectedAttendeesInput" value="">
 
 
             <!-- Notes Section -->
             <div class="mb-3">
-                <label for="notes" class="form-label">Notes</label>
-                <textarea class="form-control" id="notes" rows="3" placeholder="Enter any notes here..." required></textarea>
+                <label for="notes" class="form-label lead">Notes</label>
+                <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Enter any notes here..." required></textarea>
             </div>
 
             <!-- Submit Button -->
             <div class="text-center">
-                <button type="button" id="submitEventForm" class="btn btn-dark mb-5">Submit</button>
+                <p class="lead">
+                    Please ensure all details are correct before submitting.
+                </p>
+                <button type="button" id="submitEventForm" class="btn btn-dark btn-lg mb-5">Submit</button>
             </div>
 
         </form>
@@ -277,6 +306,27 @@ if ($event_types_result) {
 
     <script>
         var selectedAttendees = [];
+
+        //Tesseract JS
+
+        function updateTime() {
+            // Get the current time in Eastern Time (EST/EDT)
+            const options = {
+                timeZone: 'America/New_York',
+                hour12: false
+            };
+            const now = new Date().toLocaleString('en-US', options);
+
+            const dateObj = new Date(now);
+
+            // Extract hours and minutes
+            const hours = String(dateObj.getHours()).padStart(2, '0');
+            const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+
+            // Update the content of the time display
+            document.getElementById('currentTime').innerHTML = `All Events are logged in Eastern Time. The current time is ${hours}:${minutes}.`;
+        }
+        setInterval(updateTime, 10000);
 
         // Search functionality for attendees
         $('#attendeeSearch').on('keyup', function() {
@@ -286,26 +336,28 @@ if ($event_types_result) {
             });
         });
 
-        // Done button logic
-        $('#doneSelectingAttendees').on('click', function() {
-            $('#attendeesModal').modal('hide');
-            console.log('Selected Attendees:', selectedAttendees);
-            // Handle logic to update selected attendees on the form
-        });
-
         function selectCoHost(coHost, rank, imgSrc) {
             // Display the co-host card when selected
             document.getElementById('coHostCard').style.display = 'block';
             document.getElementById('coHostCard').innerHTML = `
-            <div class="card" style="width: 15rem;">
+            <div class="card" style="width: 16rem; height: 22rem;" onclick="removeCoHost()">
                 <img src="${imgSrc}" class="card-img-top" alt="Co-host Image">
                 <div class="card-body text-center">
                     <h5 class="card-title">Co-host: ${coHost}</h5>
                     <p class="card-text">${rank}</p>
                 </div>
             </div>
+            <small class="text-muted my-4">Click the card to remove Co-Host.</small>
             <input type="hidden" id="cohost" name="cohost" value=${coHost}>`;
             $('#coHostModal').modal('hide'); // Close modal after selection
+        }
+
+        function removeCoHost() {
+            // Hide the co-host card
+            document.getElementById('coHostCard').style.display = 'none';
+
+            document.getElementById('coHostCard').innerHTML = '';
+            document.getElementById('cohost').value = '';
         }
 
         // Function to handle attendee selection
@@ -339,8 +391,8 @@ if ($event_types_result) {
             document.getElementById('selectedAttendeesInput').value = JSON.stringify(attendeeUsernames);
         }
 
-        // Event listener to display selected attendees on modal close
-        $('#doneSelectingAttendees').on('click', function() {
+        // Event Handler to update selected attendees
+        const attendeeCardUpdateHandler = function() {
             $('#attendeesModal').modal('hide');
             const attendeesContainer = document.getElementById('selectedAttendees');
             attendeesContainer.innerHTML = ''; // Clear current attendees
@@ -351,8 +403,8 @@ if ($event_types_result) {
 
                 selectedAttendees.forEach(attendee => {
                     attendeesContainer.innerHTML += `
-            <div class="col-2">
-                <div class="card">
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <div class="card selected-attendee-card mb-3" onclick="removeAttendee('${attendee.username}')">
                     <img src="` + attendee.image + `" class="card-img-top" alt="${attendee.username}">
                     <div class="card-body text-center">
                         <h5 class="card-title">` + attendee.username + `</h5>
@@ -364,7 +416,27 @@ if ($event_types_result) {
             } else {
                 document.getElementById('selectedAttendeesContainer').style.display = 'none';
             }
-        });
+        }
+
+        // Event listener to trigger function that updates selected attendees on modal close
+        $('#doneSelectingAttendees').on('click', attendeeCardUpdateHandler);
+
+        function removeAttendee(attendee) {
+            const index = selectedAttendees.findIndex(att => att.username === attendee);
+            if (index !== -1) {
+                selectedAttendees.splice(index, 1);
+                $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').hide();
+                updateSelectedAttendeesInput();
+
+                // Call the click handler directly
+                attendeeCardUpdateHandler.call($('.doneSelectingAttendees')[0]);
+            }
+        }
+
+        function convertToMinutes(time) {
+            const [hours, minutes] = time.split(':').map(Number);
+            return hours * 60 + minutes;
+        }
 
 
         // Event Type logic
@@ -400,6 +472,7 @@ if ($event_types_result) {
             const startTime = document.getElementById('startTime').value;
             const endTime = document.getElementById('endTime').value;
             const notes = document.getElementById('notes').value;
+            let proceed = true;
 
             // Check if an event type is selected
             if (!selectedEventType) {
@@ -439,13 +512,36 @@ if ($event_types_result) {
                 return;
             }
 
+            // Time Logic
+            const startMinutes = convertToMinutes(startTime);
+            let endMinutes = convertToMinutes(endTime);
+
+            if (endMinutes < startMinutes) {
+                endMinutes += 24 * 60;
+            }
+
+            // Check if the difference is within 22 hours (1320 minutes)
+            const timeDifference = endMinutes - startMinutes;
+
+            if (timeDifference <= 21 * 60) {
+                proceed = confirm("The start time is potentially after the end time. Please double check and confirm if you are happy to continue.");;
+            }
+
+            if (!proceed) {
+                return;
+            }
+
+            // TL Logic Validation
+            const evalAllowed = ["Captain", "Commodore", "Vice Admiral", "Admiral", "Grand Sea Lord", "King"];
+            if (selectedEventType == "evaluation" && !evalAllowed.includes("<?php echo $rank; ?>")) {
+                alert("<?php echo $rank; ?> are not permitted to submit an evaluation.")
+                return;
+            }
+
             // If validation passes, submit the form
             document.querySelector('form').submit();
 
-            // Reset the form after successful submission
             alert("Event form submitted successfully!");
-            //window.location.href = 'log_event.php'
-            //resetForm();
         });
     </script>
 

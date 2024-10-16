@@ -10,22 +10,59 @@
     background-color: #e9ecef;
 }
 
+/* Modal Dialog Sizing */
 #attendeesModal .modal-dialog {
     width: var(--modal-width-large);
     height: var(--modal-height-large);
     max-width: var(--modal-width-large);
     max-height: var(--modal-height-large);
+    display: flex; 
+    flex-direction: column;
 }
 
+/* Modal Content and Body */
 #attendeesModal .modal-content {
-    height: 100%;
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
 }
 
 #attendeesModal .modal-body {
+    flex: 1; 
     max-height: var(--modal-body-max-height);
-    overflow-y: auto;
+    overflow-y: auto; 
+    overflow-x: hidden; 
 }
 
+/* Attendee Card Styling */
+#selectedAttendees .selected-attendee-card {
+    min-height: 308px;
+}
+
+.card {
+    margin-bottom: 10px; 
+    border: 1px solid #ccc;
+    padding: 15px; 
+}
+
+/* Hover Effect for Cards */
+.card:hover {
+    transform: scale(1.05);
+}
+
+/* Selected Card Styling */
+.attendee-card {
+    position: relative;
+}
+
+.event-type-card.selected .card {
+    border: 2px solid var(--selected-border-color);
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+}
+
+/* Responsive Adjustments */
+
+/* Small Devices (max-width: 576px) */
 @media (max-width: 576px) {
     #attendeesModal .modal-dialog {
         width: 100%;
@@ -35,38 +72,50 @@
     #attendeesModal .modal-body {
         max-height: 400px;
     }
+
+    #selectedAttendees .selected-attendee-card {
+        min-height: 250px;
+    }
 }
 
+/* Medium Devices (min-width: 576px and max-width: 768px) */
 @media (min-width: 576px) and (max-width: 768px) {
     #attendeesModal .modal-dialog {
         width: 90%;
         height: 85%;
     }
+
+    #selectedAttendees .selected-attendee-card {
+        min-height: 280px;
+    }
 }
 
-.card, #attendeesModal .card {
-    cursor: pointer;
-    transition: var(--card-transition);
+/* Large Devices (min-width: 768px and max-width: 1200px) */
+@media (min-width: 768px) and (max-width: 1200px) {
+    #attendeesModal .modal-dialog {
+        width: 80%;
+        height: 80%;
+    }
+
+    #selectedAttendees .selected-attendee-card {
+        min-height: 308px;
+    }
 }
 
-.card:hover, #attendeesModal .card:hover {
-    transform: scale(1.05);
-}
+/* Extra Large Devices (min-width: 1200px) */
+@media (min-width: 1200px) {
+    #attendeesModal .modal-dialog {
+        width: 70%;
+        height: 75%;
+    }
 
-.attendee-card {
-    position: relative;
+    #selectedAttendees .selected-attendee-card {
+        min-height: 320px;
+    }
 }
-
-.event-type-card.selected .card {
-    border: 2px solid var(--selected-border-color);
-    box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
-}
-.event-type-card::after {
-    content: '*';
-    color: red;
-    display: none;
-}
-
-.event-type-card.selected::after {
-    display: none; /* Hide asterisk if selected */
+@media (min-width: 2200px) {
+    #attendeeCards .attendee-card {
+        flex: 0 0 auto;
+        width: 8.33333%; /* Equivalent to col-1 */
+    }
 }
