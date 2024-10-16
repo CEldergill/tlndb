@@ -43,6 +43,7 @@
     margin-bottom: 10px; 
     border: 1px solid #ccc;
     padding: 15px; 
+    cursor: pointer;
 }
 
 /* Hover Effect for Cards */

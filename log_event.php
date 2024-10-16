@@ -115,7 +115,6 @@ if ($event_types_result) {
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
 
 
     <link rel="stylesheet" href="log_event.css">
@@ -159,7 +158,6 @@ if ($event_types_result) {
                         <!-- Placeholder for co-host card -->
                     </div>
                 </div>
-                <input type="file" id="screenshotInput" accept="image/*">
             </div>
 
             <!-- Co-host Modal -->
@@ -195,7 +193,7 @@ if ($event_types_result) {
             <!-- Event Type Section -->
             <section id="eventTypeSection" class="container mt-2">
                 <div class="header text-center">
-                    <h4 class="section-title">Select Event Type</h4>
+                    <h4 class="section-title mb-3">Select Event Type</h4>
                 </div>
                 <div class="row mb-2">
                     <?php foreach ($eventTypesArray as $events): ?>
@@ -307,8 +305,6 @@ if ($event_types_result) {
     <script>
         var selectedAttendees = [];
 
-        //Tesseract JS
-
         function updateTime() {
             // Get the current time in Eastern Time (EST/EDT)
             const options = {
@@ -326,6 +322,7 @@ if ($event_types_result) {
             // Update the content of the time display
             document.getElementById('currentTime').innerHTML = `All Events are logged in Eastern Time. The current time is ${hours}:${minutes}.`;
         }
+        // Checks current time every 10 seconds.
         setInterval(updateTime, 10000);
 
         // Search functionality for attendees
@@ -336,7 +333,50 @@ if ($event_types_result) {
             });
         });
 
+        // Background for Host & Co-Host to show they are not able to be selected.
+        function applyHostCohostStyles() {
+            const host = document.getElementById('host').value;
+            const cohost = document.getElementById('cohost')
+            if (cohost) {
+                const cohostVal = cohost.value;
+            }
+
+            // Apply grey background to host card
+            $(`.attendee-card-inner:contains('${host}')`).css({
+                'background-color': 'lightgrey',
+                'cursor': 'default'
+            });
+
+            // Apply grey background to co-host card
+            if (cohost) {
+                $(`.attendee-card-inner:contains('${cohost.value}')`).css({
+                    'background-color': 'lightgrey',
+                    'cursor': 'default'
+                });
+            }
+        }
+
+        $('#attendeesModal').on('show.bs.modal', function() {
+            applyHostCohostStyles(); // Ensure host and co-host cards have grey background
+        });
+
+        function removeAttendee(attendee) {
+            const index = selectedAttendees.findIndex(att => att.username === attendee);
+            if (index !== -1) {
+                selectedAttendees.splice(index, 1);
+                $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').hide();
+                updateSelectedAttendeesInput();
+
+                // Call the click handler directly
+                attendeeCardUpdateHandler.call($('.doneSelectingAttendees')[0]);
+            }
+        }
+
         function selectCoHost(coHost, rank, imgSrc) {
+            const index = selectedAttendees.findIndex(att => att.username === coHost);
+            if (index !== -1) {
+                removeAttendee(coHost);
+            }
             // Display the co-host card when selected
             document.getElementById('coHostCard').style.display = 'block';
             document.getElementById('coHostCard').innerHTML = `
@@ -350,21 +390,26 @@ if ($event_types_result) {
             <small class="text-muted my-4">Click the card to remove Co-Host.</small>
             <input type="hidden" id="cohost" name="cohost" value=${coHost}>`;
             $('#coHostModal').modal('hide'); // Close modal after selection
+
         }
 
         function removeCoHost() {
             // Hide the co-host card
             document.getElementById('coHostCard').style.display = 'none';
-
             document.getElementById('coHostCard').innerHTML = '';
-            document.getElementById('cohost').value = '';
         }
 
         // Function to handle attendee selection
         function selectAttendee(attendee, rank, imgSrc) {
             const index = selectedAttendees.findIndex(att => att.username === attendee);
+            const host = document.getElementById('host');
+            const cohost = document.getElementById('cohost');
+            let cohostVal = "";
+            if (cohost) {
+                cohostVal = cohost.value;
+            }
 
-            if (index === -1) {
+            if (index === -1 && attendee !== host.value && attendee !== cohostVal) {
                 // Add attendee if not already selected
                 selectedAttendees.push({
                     username: attendee,
@@ -374,8 +419,10 @@ if ($event_types_result) {
                 $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').show();
             } else {
                 // Remove attendee if already selected
-                selectedAttendees.splice(index, 1);
-                $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').hide();
+                if (index === -1) {
+                    selectedAttendees.splice(index, 1);
+                    $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').hide();
+                }
             }
 
             // Update hidden input with selected attendees
@@ -420,18 +467,6 @@ if ($event_types_result) {
 
         // Event listener to trigger function that updates selected attendees on modal close
         $('#doneSelectingAttendees').on('click', attendeeCardUpdateHandler);
-
-        function removeAttendee(attendee) {
-            const index = selectedAttendees.findIndex(att => att.username === attendee);
-            if (index !== -1) {
-                selectedAttendees.splice(index, 1);
-                $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').hide();
-                updateSelectedAttendeesInput();
-
-                // Call the click handler directly
-                attendeeCardUpdateHandler.call($('.doneSelectingAttendees')[0]);
-            }
-        }
 
         function convertToMinutes(time) {
             const [hours, minutes] = time.split(':').map(Number);

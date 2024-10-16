@@ -45,8 +45,8 @@ $selectedOption = isset($_SESSION['selected_navy']) ? $_SESSION['selected_navy']
             <h3>Select Your Navy</h3>
             <hr>
             <div class="d-flex justify-content-between">
-                <div class="selection-button button1" data-option="NBN" onclick="selectOption('NBN', this)"></div>
-                <div class="selection-button button2" data-option="WCN" onclick="selectOption('WCN', this)"></div>
+                <div class="selection-button button1" data-option="NBN"></div>
+                <div class="selection-button button2" data-option="WCN"></div>
             </div>
             <p>Click the button below to authenticate using your Roblox account.</p>
             <button id="loginButton" class="btn btn-primary btn-lg" onclick="location.href = 'login.php'" disabled>Login with Roblox</button>
