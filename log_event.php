@@ -291,6 +291,8 @@ if ($event_types_result) {
                 <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Enter any notes here..." required></textarea>
             </div>
 
+            <hr>
+
             <!-- Submit Button -->
             <div class="text-center">
                 <p class="lead">
@@ -301,86 +303,86 @@ if ($event_types_result) {
 
         </form>
     </div>
+</body>
+<script>
+    var selectedAttendees = [];
 
-    <script>
-        var selectedAttendees = [];
+    function updateTime() {
+        // Get the current time in Eastern Time (EST/EDT)
+        const options = {
+            timeZone: 'America/New_York',
+            hour12: false
+        };
+        const now = new Date().toLocaleString('en-US', options);
 
-        function updateTime() {
-            // Get the current time in Eastern Time (EST/EDT)
-            const options = {
-                timeZone: 'America/New_York',
-                hour12: false
-            };
-            const now = new Date().toLocaleString('en-US', options);
+        const dateObj = new Date(now);
 
-            const dateObj = new Date(now);
+        // Extract hours and minutes
+        const hours = String(dateObj.getHours()).padStart(2, '0');
+        const minutes = String(dateObj.getMinutes()).padStart(2, '0');
 
-            // Extract hours and minutes
-            const hours = String(dateObj.getHours()).padStart(2, '0');
-            const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+        // Update the content of the time display
+        document.getElementById('currentTime').innerHTML = `All Events are logged in Eastern Time. The current time is ${hours}:${minutes}.`;
+    }
+    // Checks current time every 10 seconds.
+    setInterval(updateTime, 10000);
 
-            // Update the content of the time display
-            document.getElementById('currentTime').innerHTML = `All Events are logged in Eastern Time. The current time is ${hours}:${minutes}.`;
+    // Search functionality for attendees
+    $('#attendeeSearch').on('keyup', function() {
+        var value = $(this).val().toLowerCase();
+        $('#attendeeCards .attendee-card').filter(function() {
+            $(this).toggle($(this).data('username').indexOf(value) > -1);
+        });
+    });
+
+    // Background for Host & Co-Host to show they are not able to be selected.
+    function applyHostCohostStyles() {
+        const host = document.getElementById('host').value;
+        const cohost = document.getElementById('cohost')
+        if (cohost) {
+            const cohostVal = cohost.value;
         }
-        // Checks current time every 10 seconds.
-        setInterval(updateTime, 10000);
 
-        // Search functionality for attendees
-        $('#attendeeSearch').on('keyup', function() {
-            var value = $(this).val().toLowerCase();
-            $('#attendeeCards .attendee-card').filter(function() {
-                $(this).toggle($(this).data('username').indexOf(value) > -1);
-            });
+        // Apply grey background to host card
+        $(`.attendee-card-inner:contains('${host}')`).css({
+            'background-color': 'lightgrey',
+            'cursor': 'default'
         });
 
-        // Background for Host & Co-Host to show they are not able to be selected.
-        function applyHostCohostStyles() {
-            const host = document.getElementById('host').value;
-            const cohost = document.getElementById('cohost')
-            if (cohost) {
-                const cohostVal = cohost.value;
-            }
-
-            // Apply grey background to host card
-            $(`.attendee-card-inner:contains('${host}')`).css({
+        // Apply grey background to co-host card
+        if (cohost) {
+            $(`.attendee-card-inner:contains('${cohost.value}')`).css({
                 'background-color': 'lightgrey',
                 'cursor': 'default'
             });
-
-            // Apply grey background to co-host card
-            if (cohost) {
-                $(`.attendee-card-inner:contains('${cohost.value}')`).css({
-                    'background-color': 'lightgrey',
-                    'cursor': 'default'
-                });
-            }
         }
+    }
 
-        $('#attendeesModal').on('show.bs.modal', function() {
-            applyHostCohostStyles(); // Ensure host and co-host cards have grey background
-        });
+    $('#attendeesModal').on('show.bs.modal', function() {
+        applyHostCohostStyles(); // Ensure host and co-host cards have grey background
+    });
 
-        function removeAttendee(attendee) {
-            const index = selectedAttendees.findIndex(att => att.username === attendee);
-            if (index !== -1) {
-                selectedAttendees.splice(index, 1);
-                $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').hide();
-                updateSelectedAttendeesInput();
+    function removeAttendee(attendee) {
+        const index = selectedAttendees.findIndex(att => att.username === attendee);
+        if (index !== -1) {
+            selectedAttendees.splice(index, 1);
+            $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').hide();
+            updateSelectedAttendeesInput();
 
-                // Call the click handler directly
-                attendeeCardUpdateHandler.call($('.doneSelectingAttendees')[0]);
-            }
+            // Call the click handler directly
+            attendeeCardUpdateHandler.call($('.doneSelectingAttendees')[0]);
         }
+    }
 
-        function selectCoHost(coHost, rank, imgSrc) {
-            const index = selectedAttendees.findIndex(att => att.username === coHost);
-            if (index !== -1) {
-                removeAttendee(coHost);
-            }
-            // Display the co-host card when selected
-            document.getElementById('coHostCard').style.display = 'block';
-            document.getElementById('coHostCard').innerHTML = `
-            <div class="card" style="width: 16rem; height: 22rem;" onclick="removeCoHost()">
+    function selectCoHost(coHost, rank, imgSrc) {
+        const index = selectedAttendees.findIndex(att => att.username === coHost);
+        if (index !== -1) {
+            removeAttendee(coHost);
+        }
+        // Display the co-host card when selected
+        document.getElementById('coHostCard').style.display = 'block';
+        document.getElementById('coHostCard').innerHTML = `
+            <div class="card" style="width: 16rem; height: 22rem;" onclick="removeCoHost('${coHost}')">
                 <img src="${imgSrc}" class="card-img-top" alt="Co-host Image">
                 <div class="card-body text-center">
                     <h5 class="card-title">Co-host: ${coHost}</h5>
@@ -389,67 +391,71 @@ if ($event_types_result) {
             </div>
             <small class="text-muted my-4">Click the card to remove Co-Host.</small>
             <input type="hidden" id="cohost" name="cohost" value=${coHost}>`;
-            $('#coHostModal').modal('hide'); // Close modal after selection
+        $('#coHostModal').modal('hide'); // Close modal after selection
 
+    }
+
+    function removeCoHost(coHost) {
+        // Hide the co-host card
+        document.getElementById('coHostCard').style.display = 'none';
+        document.getElementById('coHostCard').innerHTML = '';
+        $(`.attendee-card-inner:contains('${coHost}')`).css({
+            'background-color': 'light',
+            'cursor': 'pointer'
+        });
+    }
+
+    // Function to handle attendee selection
+    function selectAttendee(attendee, rank, imgSrc) {
+        const index = selectedAttendees.findIndex(att => att.username === attendee);
+        const host = document.getElementById('host');
+        const cohost = document.getElementById('cohost');
+        let cohostVal = "";
+        if (cohost) {
+            cohostVal = cohost.value;
         }
 
-        function removeCoHost() {
-            // Hide the co-host card
-            document.getElementById('coHostCard').style.display = 'none';
-            document.getElementById('coHostCard').innerHTML = '';
-        }
-
-        // Function to handle attendee selection
-        function selectAttendee(attendee, rank, imgSrc) {
-            const index = selectedAttendees.findIndex(att => att.username === attendee);
-            const host = document.getElementById('host');
-            const cohost = document.getElementById('cohost');
-            let cohostVal = "";
-            if (cohost) {
-                cohostVal = cohost.value;
+        if (index === -1 && attendee !== host.value && attendee !== cohostVal) {
+            // Add attendee if not already selected
+            selectedAttendees.push({
+                username: attendee,
+                rank: rank,
+                image: imgSrc
+            });
+            $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').show();
+        } else {
+            // Remove attendee if already selected
+            if (index === -1) {
+                selectedAttendees.splice(index, 1);
+                $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').hide();
             }
-
-            if (index === -1 && attendee !== host.value && attendee !== cohostVal) {
-                // Add attendee if not already selected
-                selectedAttendees.push({
-                    username: attendee,
-                    rank: rank,
-                    image: imgSrc
-                });
-                $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').show();
-            } else {
-                // Remove attendee if already selected
-                if (index === -1) {
-                    selectedAttendees.splice(index, 1);
-                    $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').hide();
-                }
-            }
-
-            // Update hidden input with selected attendees
-            updateSelectedAttendeesInput();
         }
 
-        // Function to update the hidden input with selected attendees
-        function updateSelectedAttendeesInput() {
-            // Extract usernames from the selected attendees array
-            const attendeeUsernames = selectedAttendees.map(att => att.username);
+        // Update hidden input with selected attendees
+        updateSelectedAttendeesInput();
+    }
 
-            // Convert to JSON string format (e.g., ["username1", "username2"])
-            document.getElementById('selectedAttendeesInput').value = JSON.stringify(attendeeUsernames);
-        }
+    // Function to update the hidden input with selected attendees
+    function updateSelectedAttendeesInput() {
+        // Extract usernames from the selected attendees array
+        const attendeeUsernames = selectedAttendees.map(att => att.username);
 
-        // Event Handler to update selected attendees
-        const attendeeCardUpdateHandler = function() {
-            $('#attendeesModal').modal('hide');
-            const attendeesContainer = document.getElementById('selectedAttendees');
-            attendeesContainer.innerHTML = ''; // Clear current attendees
-            updateSelectedAttendeesInput();
+        // Convert to JSON string format (e.g., ["username1", "username2"])
+        document.getElementById('selectedAttendeesInput').value = JSON.stringify(attendeeUsernames);
+    }
 
-            if (selectedAttendees.length > 0) {
-                document.getElementById('selectedAttendeesContainer').style.display = 'block';
+    // Event Handler to update selected attendees
+    const attendeeCardUpdateHandler = function() {
+        $('#attendeesModal').modal('hide');
+        const attendeesContainer = document.getElementById('selectedAttendees');
+        attendeesContainer.innerHTML = ''; // Clear current attendees
+        updateSelectedAttendeesInput();
 
-                selectedAttendees.forEach(attendee => {
-                    attendeesContainer.innerHTML += `
+        if (selectedAttendees.length > 0) {
+            document.getElementById('selectedAttendeesContainer').style.display = 'block';
+
+            selectedAttendees.forEach(attendee => {
+                attendeesContainer.innerHTML += `
             <div class="col-6 col-sm-4 col-md-3 col-lg-2">
                 <div class="card selected-attendee-card mb-3" onclick="removeAttendee('${attendee.username}')">
                     <img src="` + attendee.image + `" class="card-img-top" alt="${attendee.username}">
@@ -459,130 +465,126 @@ if ($event_types_result) {
                     </div>
                 </div>
             </div>`;
-                });
-            } else {
-                document.getElementById('selectedAttendeesContainer').style.display = 'none';
-            }
+            });
+        } else {
+            document.getElementById('selectedAttendeesContainer').style.display = 'none';
         }
+    }
 
-        // Event listener to trigger function that updates selected attendees on modal close
-        $('#doneSelectingAttendees').on('click', attendeeCardUpdateHandler);
+    // Event listener to trigger function that updates selected attendees on modal close
+    $('#doneSelectingAttendees').on('click', attendeeCardUpdateHandler);
 
-        function convertToMinutes(time) {
-            const [hours, minutes] = time.split(':').map(Number);
-            return hours * 60 + minutes;
-        }
+    function convertToMinutes(time) {
+        const [hours, minutes] = time.split(':').map(Number);
+        return hours * 60 + minutes;
+    }
 
 
-        // Event Type logic
-        document.addEventListener('DOMContentLoaded', function() {
-            const eventCards = document.querySelectorAll('.event-type-card');
-            const eventTypeInput = document.getElementById('eventType'); // Get the hidden input
+    // Event Type logic
+    document.addEventListener('DOMContentLoaded', function() {
+        const eventCards = document.querySelectorAll('.event-type-card');
+        const eventTypeInput = document.getElementById('eventType'); // Get the hidden input
 
-            eventCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    // Deselect any previously selected card
-                    eventCards.forEach(c => {
-                        c.classList.remove('selected');
-                        const checkmark = c.querySelector('.checkmark');
-                        checkmark.style.display = 'none';
-                    });
-
-                    // Select the clicked card
-                    this.classList.add('selected');
-                    const checkmark = this.querySelector('.checkmark');
-                    checkmark.style.display = 'inline-block';
-
-                    // Set the hidden input value to the selected event type
-                    const selectedEventType = this.getAttribute('data-event-type');
-                    eventTypeInput.value = selectedEventType;
+        eventCards.forEach(card => {
+            card.addEventListener('click', function() {
+                // Deselect any previously selected card
+                eventCards.forEach(c => {
+                    c.classList.remove('selected');
+                    const checkmark = c.querySelector('.checkmark');
+                    checkmark.style.display = 'none';
                 });
+
+                // Select the clicked card
+                this.classList.add('selected');
+                const checkmark = this.querySelector('.checkmark');
+                checkmark.style.display = 'inline-block';
+
+                // Set the hidden input value to the selected event type
+                const selectedEventType = this.getAttribute('data-event-type');
+                eventTypeInput.value = selectedEventType;
             });
         });
+    });
 
-        // Validation Logic
-        document.getElementById('submitEventForm').addEventListener('click', function() {
-            const selectedEventType = document.getElementById('eventType').value;
-            const selectedAttendeesInput = document.getElementById('selectedAttendeesInput').value;
-            const startTime = document.getElementById('startTime').value;
-            const endTime = document.getElementById('endTime').value;
-            const notes = document.getElementById('notes').value;
-            let proceed = true;
+    // Validation Logic
+    document.getElementById('submitEventForm').addEventListener('click', function() {
+        const selectedEventType = document.getElementById('eventType').value;
+        const selectedAttendeesInput = document.getElementById('selectedAttendeesInput').value;
+        const startTime = document.getElementById('startTime').value;
+        const endTime = document.getElementById('endTime').value;
+        const notes = document.getElementById('notes').value;
+        let proceed = true;
 
-            // Check if an event type is selected
-            if (!selectedEventType) {
-                alert("Please select an event type.");
+        // Check if an event type is selected
+        if (!selectedEventType) {
+            alert("Please select an event type.");
+            return;
+        }
+
+        // Check if there are selected attendees and parse them if they exist
+        let selectedAttendees = [];
+        if (selectedAttendeesInput) {
+            try {
+                selectedAttendees = JSON.parse(selectedAttendeesInput);
+            } catch (e) {
+                console.error("Error parsing selected attendees:", e);
+                alert("There was an error with the selected attendees. Please try again.");
                 return;
             }
+        }
 
-            // Check if there are selected attendees and parse them if they exist
-            let selectedAttendees = [];
-            if (selectedAttendeesInput) {
-                try {
-                    selectedAttendees = JSON.parse(selectedAttendeesInput);
-                } catch (e) {
-                    console.error("Error parsing selected attendees:", e);
-                    alert("There was an error with the selected attendees. Please try again.");
-                    return;
-                }
-            }
+        if (!startTime) {
+            alert("Please enter a start time for the event.");
+            return;
+        }
 
-            if (!startTime) {
-                alert("Please enter a start time for the event.");
-                return;
-            }
+        if (!endTime) {
+            alert("Please enter an end time for the event.");
+            return;
+        }
 
-            if (!endTime) {
-                alert("Please enter an end time for the event.");
-                return;
-            }
+        if (!selectedAttendees || selectedAttendees.length < 3) {
+            alert("Please select at least 3 attendees.");
+            return;
+        }
 
-            if (!selectedAttendees || selectedAttendees.length < 3) {
-                alert("Please select at least 3 attendees.");
-                return;
-            }
+        if (!notes) {
+            alert("Please enter notes for the event.");
+            return;
+        }
 
-            if (!notes) {
-                alert("Please enter notes for the event.");
-                return;
-            }
+        // Time Logic
+        const startMinutes = convertToMinutes(startTime);
+        let endMinutes = convertToMinutes(endTime);
 
-            // Time Logic
-            const startMinutes = convertToMinutes(startTime);
-            let endMinutes = convertToMinutes(endTime);
+        if (endMinutes < startMinutes) {
+            endMinutes += 24 * 60;
+        }
 
-            if (endMinutes < startMinutes) {
-                endMinutes += 24 * 60;
-            }
+        // Check if the difference is within 22 hours (1320 minutes)
+        const timeDifference = endMinutes - startMinutes;
 
-            // Check if the difference is within 22 hours (1320 minutes)
-            const timeDifference = endMinutes - startMinutes;
+        if (timeDifference <= 21 * 60) {
+            proceed = confirm("The start time is potentially after the end time. Please double check and confirm if you are happy to continue.");;
+        }
 
-            if (timeDifference <= 21 * 60) {
-                proceed = confirm("The start time is potentially after the end time. Please double check and confirm if you are happy to continue.");;
-            }
+        if (!proceed) {
+            return;
+        }
 
-            if (!proceed) {
-                return;
-            }
+        // TL Logic Validation
+        const hrAllowed = ["Captain", "Commodore", "Vice Admiral", "Admiral", "Grand Sea Lord", "King"];
+        if ((selectedEventType === "evaluation" || selectedEventType === "war battle") && !hrAllowed.includes("<?php echo $rank; ?>")) {
+            alert("<?php echo $rank; ?> are not permitted to submit this event type.")
+            return;
+        }
 
-            // TL Logic Validation
-            const evalAllowed = ["Captain", "Commodore", "Vice Admiral", "Admiral", "Grand Sea Lord", "King"];
-            if (selectedEventType == "evaluation" && !evalAllowed.includes("<?php echo $rank; ?>")) {
-                alert("<?php echo $rank; ?> are not permitted to submit an evaluation.")
-                return;
-            }
+        // If validation passes, submit the form
+        document.querySelector('form').submit();
 
-            // If validation passes, submit the form
-            document.querySelector('form').submit();
-
-            alert("Event form submitted successfully!");
-        });
-    </script>
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+        alert("Event form submitted successfully!");
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </html>

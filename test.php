@@ -11,7 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $startTime = isset($_POST['startTime']) ? htmlspecialchars($_POST['startTime']) : '';
     $endTime = isset($_POST['endTime']) ? htmlspecialchars($_POST['endTime']) : '';
     $notes = isset($_POST['notes']) ? htmlspecialchars($_POST['notes']) : '';
-    $host = isset($_POST['host']) ? htmlspecialchars($_POST['host']) : ''; // Capture host
+    $host = isset($_POST['host']) ? htmlspecialchars($_POST['host']) : '';
+    $cohost = isset($_POST['cohost']) ? htmlspecialchars($_POST['cohost']) : ''; // Capture host
 
     // Display the captured data
     echo "<h1>Form Submission Results</h1>";
@@ -22,7 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "<p><strong>Start Time:</strong> $startTime</p>";
     echo "<p><strong>End Time:</strong> $endTime</p>";
     echo "<p><strong>Notes:</strong> $notes</p>";
-    echo "<p><strong>Host:</strong> $host</p>"; // Display host
+    echo "<p><strong>Host:</strong> $host</p>";
+    echo "<p><strong>CoHost:</strong> $cohost</p>";
 } else {
     echo "<p>No data submitted.</p>";
 }
