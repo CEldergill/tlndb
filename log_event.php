@@ -37,6 +37,18 @@ $displayName = $user['name'];
 $userName = $user['preferred_username'];
 $rank = $user['rank'];
 
+// Testing purposes only
+if ($userName === "Cjegames") {
+    $rank = "Commander";
+}
+
+// Prevent Low Ranks from access.
+
+if ($rank === "Crewman" || $rank == "Able Crewman" || $rank == "Specialist") {
+    header("Location: home.php");
+    exit();
+}
+
 if ($selected_navy === "NBN") {
     $faction_id  = 1;
 } else {
@@ -53,7 +65,7 @@ $defaultEndTime = date('H:i'); // current time in HH:MM format
 
 // SQL For Users
 
-$sql = "SELECT m.username, r.name, m.image_link
+$sql = "SELECT m.id, m.username, r.name, m.image_link
         FROM members AS m 
         JOIN rank AS r ON m.rank_id = r.id 
         WHERE m.faction_id = ?
@@ -67,13 +79,13 @@ $all_users_result = $stmt->get_result();
 
 if ($all_users_result) {
     while ($row = mysqli_fetch_assoc($all_users_result)) {
-        $attendeesArray[] = [$row['name'], $row['username'], $row['image_link']];
+        $attendeesArray[] = [$row['id'], $row['name'], $row['username'], $row['image_link']];
     }
 }
 
 // SQL For Co-Host
 
-$sql = "SELECT m.username, r.name, m.image_link
+$sql = "SELECT m.id, m.username, r.name, m.image_link
         FROM members AS m 
         JOIN rank AS r ON m.rank_id = r.id 
         WHERE m.faction_id = ? AND m.rank_id > 8";
@@ -85,13 +97,13 @@ $cohost_result = $stmt->get_result();
 
 if ($cohost_result) {
     while ($row = mysqli_fetch_assoc($cohost_result)) {
-        $cohostArray[] = [$row['name'], $row['username'], $row['image_link']];
+        $cohostArray[] = [$row['id'], $row['name'], $row['username'], $row['image_link']];
     }
 }
 
 // SQL For Event Type
 
-$sql = "SELECT `name` FROM `event_types`;";
+$sql = "SELECT `name`, `id` FROM `event_types`;";
 
 $event_types_result = $conn->query($sql);
 
@@ -100,7 +112,10 @@ $eventTypesArray = [];
 if ($event_types_result) {
     while ($row = mysqli_fetch_assoc($event_types_result)) {
         // Append each event type name to the array
-        $eventTypesArray[] = $row['name'];
+        $eventTypesArray[] = [
+            'name' => $row['name'],
+            'id' => $row['id']
+        ];
     }
 }
 
@@ -126,7 +141,7 @@ if ($event_types_result) {
     <div class="container mt-5">
         <h1 class="text-center display-1">Create Event</h1>
         <hr>
-        <form method="POST" action="test.php">
+        <form method="POST" action="sendEventToDb.php">
 
             <!-- Form Inputs for ID and Faction -->
             <input type="hidden" id="userid" name="userid" value=<?php safeEcho($id); ?>>
@@ -135,7 +150,7 @@ if ($event_types_result) {
             <!-- Host Section -->
             <div class="row mb-3">
                 <div class="col-md-3 d-flex flex-column align-items-center">
-                    <div class="card" style="width: 16rem; height: 22rem;">
+                    <div class="card" id="hostStyleCard" data-name="<?php safeEcho($userName); ?>" style="width: 16rem; height: 22rem;">
                         <img src="<?php echo $user['picture']; ?>" class="card-img-top" alt="Host Image">
                         <div class="card-body text-center">
                             <h5 class="card-title">Host: <?php safeEcho($userName); ?></h5>
@@ -148,7 +163,7 @@ if ($event_types_result) {
                 </div>
 
                 <!-- Form Input for Username of Host -->
-                <input type="hidden" id="host" name="host" value=<?php safeEcho($userName); ?>>
+                <input type="hidden" id="host" name="host" value=<?php safeEcho($id); ?>>
 
                 <!-- Co-host Section -->
                 <div class="col-md-3">
@@ -171,13 +186,13 @@ if ($event_types_result) {
                         <div class="modal-body" style="height: 90%; overflow-y: auto;">
                             <div class="row">
                                 <?php foreach ($cohostArray as $coHost): ?>
-                                    <div class="col-12 col-sm-6 col-lg-3 mb-3" data-username="<?php safeEcho(strtolower($coHost[1])); ?>">
+                                    <div class="col-12 col-sm-6 col-lg-3 mb-3" data-username="<?php safeEcho(strtolower($coHost[2])); ?>">
                                         <div class="card" style="cursor:pointer;"
-                                            onclick="selectCoHost('<?php safeEcho($coHost[1]); ?>','<?php safeEcho($coHost[0]); ?>', '<?php safeEcho($coHost[2]); ?>')">
-                                            <img src="<?php safeEcho($coHost[2]); ?>" class="card-img-top" alt="Co-host Image">
+                                            onclick="selectCoHost('<?php safeEcho($coHost[0]); ?>','<?php safeEcho($coHost[2]); ?>','<?php safeEcho($coHost[1]); ?>', '<?php safeEcho($coHost[3]); ?>')">
+                                            <img src="<?php safeEcho($coHost[3]); ?>" class="card-img-top" alt="Co-host Image">
                                             <div class="card-body text-center">
-                                                <h5 class="card-title"><?php safeEcho($coHost[1]); ?></h5>
-                                                <p class="card-text"><?php safeEcho($coHost[0]); ?></p>
+                                                <h5 class="card-title"><?php safeEcho($coHost[2]); ?></h5>
+                                                <p class="card-text"><?php safeEcho($coHost[1]); ?></p>
                                                 <span class="checkmark" style="display:none;">✔️</span>
                                             </div>
                                         </div>
@@ -197,10 +212,10 @@ if ($event_types_result) {
                 </div>
                 <div class="row mb-2">
                     <?php foreach ($eventTypesArray as $events): ?>
-                        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3 event-type-card" data-event-type="<?php safeEcho(strtolower($events)); ?>">
+                        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3 event-type-card" data-event-type="<?php safeEcho(strtolower($events['id'])); ?>">
                             <div class="card event-card-inner" style="cursor:pointer;">
                                 <div class="card-body text-center">
-                                    <h5 class="card-title"><?php safeEcho($events); ?></h5>
+                                    <h5 class="card-title"><?php safeEcho($events['name']); ?></h5>
                                     <span class="checkmark" style="display:none;">✔️</span>
                                 </div>
                             </div>
@@ -242,18 +257,17 @@ if ($event_types_result) {
                             <!-- Attendees Cards -->
                             <div class="row" id="attendeeCards">
                                 <?php foreach ($attendeesArray as $attendee): ?>
-                                    <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-2 attendee-card" data-username="<?php safeEcho(strtolower($attendee[1])); ?>">
+                                    <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-2 attendee-card" data-username="<?php safeEcho(strtolower($attendee[2])); ?>">
                                         <div class="card attendee-card-inner" style="cursor:pointer;"
-                                            onclick="selectAttendee('<?php safeEcho($attendee[1]); ?>', '<?php safeEcho($attendee[0]); ?>', '<?php safeEcho($attendee[2]); ?>')">
-                                            <img src="<?php safeEcho($attendee[2]); ?>" class="card-img-top" alt="Attendee Image">
+                                            onclick="selectAttendee('<?php safeEcho($attendee[0]); ?>', '<?php safeEcho($attendee[2]); ?>', '<?php safeEcho($attendee[1]); ?>', '<?php safeEcho($attendee[3]); ?>')">
+                                            <img src="<?php safeEcho($attendee[3]); ?>" class="card-img-top" alt="Attendee Image">
                                             <div class="card-body text-center">
-                                                <h5 class="card-title"><?php safeEcho($attendee[1]); ?></h5>
-                                                <p class="card-text"><?php safeEcho($attendee[0]); ?></p>
+                                                <h5 class="card-title"><?php safeEcho($attendee[2]); ?></h5>
+                                                <p class="card-text"><?php safeEcho($attendee[1]); ?></p>
                                                 <span class="checkmark" style="display:none;">✔️</span> <!-- Checkmark for selected users -->
                                             </div>
                                         </div>
                                     </div>
-
                                 <?php endforeach; ?>
                             </div>
                         </div>
@@ -337,10 +351,12 @@ if ($event_types_result) {
 
     // Background for Host & Co-Host to show they are not able to be selected.
     function applyHostCohostStyles() {
-        const host = document.getElementById('host').value;
-        const cohost = document.getElementById('cohost')
+        const host = document.getElementById('hostStyleCard').getAttribute('data-name');
+        const cohost = document.getElementById('cohostStyleCard')
+        let cohostVal = "";
+
         if (cohost) {
-            const cohostVal = cohost.value;
+            cohostVal = cohost.getAttribute('data-name');
         }
 
         // Apply grey background to host card
@@ -350,8 +366,8 @@ if ($event_types_result) {
         });
 
         // Apply grey background to co-host card
-        if (cohost) {
-            $(`.attendee-card-inner:contains('${cohost.value}')`).css({
+        if (cohostVal) {
+            $(`.attendee-card-inner:contains('${cohostVal}')`).css({
                 'background-color': 'lightgrey',
                 'cursor': 'default'
             });
@@ -374,7 +390,7 @@ if ($event_types_result) {
         }
     }
 
-    function selectCoHost(coHost, rank, imgSrc) {
+    function selectCoHost(id, coHost, rank, imgSrc) {
         const index = selectedAttendees.findIndex(att => att.username === coHost);
         if (index !== -1) {
             removeAttendee(coHost);
@@ -382,7 +398,7 @@ if ($event_types_result) {
         // Display the co-host card when selected
         document.getElementById('coHostCard').style.display = 'block';
         document.getElementById('coHostCard').innerHTML = `
-            <div class="card" style="width: 16rem; height: 22rem;" onclick="removeCoHost('${coHost}')">
+            <div class="card" id="cohostStyleCard" data-name="${coHost}" style="width: 16rem; height: 22rem;" onclick="removeCoHost('${coHost}')">
                 <img src="${imgSrc}" class="card-img-top" alt="Co-host Image">
                 <div class="card-body text-center">
                     <h5 class="card-title">Co-host: ${coHost}</h5>
@@ -390,7 +406,7 @@ if ($event_types_result) {
                 </div>
             </div>
             <small class="text-muted my-4">Click the card to remove Co-Host.</small>
-            <input type="hidden" id="cohost" name="cohost" value=${coHost}>`;
+            <input type="hidden" id="cohost" name="cohost" value=${id}>`;
         $('#coHostModal').modal('hide'); // Close modal after selection
 
     }
@@ -406,7 +422,7 @@ if ($event_types_result) {
     }
 
     // Function to handle attendee selection
-    function selectAttendee(attendee, rank, imgSrc) {
+    function selectAttendee(id, attendee, rank, imgSrc) {
         const index = selectedAttendees.findIndex(att => att.username === attendee);
         const host = document.getElementById('host');
         const cohost = document.getElementById('cohost');
@@ -418,6 +434,7 @@ if ($event_types_result) {
         if (index === -1 && attendee !== host.value && attendee !== cohostVal) {
             // Add attendee if not already selected
             selectedAttendees.push({
+                id: id,
                 username: attendee,
                 rank: rank,
                 image: imgSrc
@@ -438,10 +455,9 @@ if ($event_types_result) {
     // Function to update the hidden input with selected attendees
     function updateSelectedAttendeesInput() {
         // Extract usernames from the selected attendees array
-        const attendeeUsernames = selectedAttendees.map(att => att.username);
+        const attendeeIds = selectedAttendees.map(att => att.id);
 
-        // Convert to JSON string format (e.g., ["username1", "username2"])
-        document.getElementById('selectedAttendeesInput').value = JSON.stringify(attendeeUsernames);
+        document.getElementById('selectedAttendeesInput').value = JSON.stringify(attendeeIds);
     }
 
     // Event Handler to update selected attendees
@@ -561,10 +577,10 @@ if ($event_types_result) {
             endMinutes += 24 * 60;
         }
 
-        // Check if the difference is within 22 hours (1320 minutes)
+        // Check if the difference is within 20 hours
         const timeDifference = endMinutes - startMinutes;
 
-        if (timeDifference <= 21 * 60) {
+        if (timeDifference <= 20 * 60) {
             proceed = confirm("The start time is potentially after the end time. Please double check and confirm if you are happy to continue.");;
         }
 

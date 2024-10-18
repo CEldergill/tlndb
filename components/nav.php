@@ -3,6 +3,12 @@
 $token = $_SESSION['access']['token'];
 
 $user = $_SESSION['user'];
+$rank = $user['rank'];
+
+// Testing purposes only
+if ($userName === "Cjegames") {
+    $rank = "Commander";
+}
 
 $selected_navy = $user['selected_navy'];
 $id = $user['sub'];
@@ -63,18 +69,18 @@ $pfp_link = $user['picture'];
             <a href="home.php" class="nav-link <?php echo ($activePage == 'home') ? 'active' : ''; ?>">Home</a>
         </li>
         <li class="nav-item dropdown">
-            <button class="nav-link dropdown-toggle <?php echo ($activePage == 'log_event') ? 'active' : ''; ?>" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="nav-link limited dropdown-toggle <?php echo ($activePage == 'log_event') ? 'active' : ''; ?>" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Event Logs
             </button>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item <?php echo ($activePage == 'log_event') ? 'active' : ''; ?>" href="log_event.php">Submit Event Log</a></li>
-                <li><a class="dropdown-item disabled" href="#">View Event Logs</a></li>
+                <li><a class="dropdown-item limited <?php echo ($activePage == 'log_event') ? 'active' : ''; ?>" href="log_event.php">Submit Event Log</a></li>
+                <li><a class="dropdown-item limited <?php echo ($activePage == 'view_events') ? 'active' : ''; ?>" href="view_events.php">View Event Logs</a></li>
             </ul>
         </li>
-        <li class="nav-item"><a href="#" class="nav-link disabled">War Eligibility</a></li>
-        <li class="nav-item"><a href="#" class="nav-link disabled">HR Dashboard</a></li>
-        <li class="nav-item"><a href="#" class="nav-link disabled">Quota</a></li>
-        <li class="nav-item"><a href="#" class="nav-link disabled">Medals</a></li>
+        <li class="nav-item"><a href="#" class="nav-link limited disabled">War Eligibility</a></li>
+        <li class="nav-item"><a href="#" class="nav-link limited disabled">HR Dashboard</a></li>
+        <li class="nav-item"><a href="#" class="nav-link limited disabled">Quota</a></li>
+        <li class="nav-item"><a href="#" class="nav-link limited disabled">Medals</a></li>
         <li class="nav-item"><a href="logout.php" class="nav-link btn btn-danger">Logout</a></li>
     </ul>
 
@@ -86,11 +92,19 @@ $pfp_link = $user['picture'];
 
 <script>
     $(document).ready(function() {
+
+        //Prevent LR's from accessing HR Documents
+        var rank = "<?php echo $rank
+                    ?>";
+        if (rank === "Crewman" || rank === "Able Crewman" || rank === "Specialist") {
+            $('.limited').addClass('disabled');
+        }
+
         // Handle active state switching
         $('.nav-link').on('click', function(e) {
             // Check if the clicked link is disabled
             if ($(this).hasClass('disabled')) {
-                e.preventDefault(); // Prevent default action if it's disabled
+                e.preventDefault();
                 return; // Exit the function
             }
 

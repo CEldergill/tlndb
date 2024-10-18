@@ -1,0 +1,133 @@
+.modal-dialog {
+    max-width: 600px; /* Adjust width as needed */
+}
+
+.modal-body {
+    max-height: 400px;
+    overflow-y: auto; /* Enable vertical scrolling */
+    word-wrap: break-word; /* Ensure long words are wrapped */
+}
+:root {
+    --modal-width-large: 80%;
+    --modal-height-large: 80%;
+    --modal-body-max-height: 90%;
+    --card-transition: transform 0.2s;
+    --selected-border-color: #007bff;
+}
+
+.form-control[readonly] {
+    background-color: #e9ecef;
+}
+
+/* Modal Dialog Sizing */
+#contentModal .modal-dialog {
+    width: var(--modal-width-large);
+    height: var(--modal-height-large);
+    max-width: var(--modal-width-large);
+    max-height: var(--modal-height-large);
+    display: flex; 
+    flex-direction: column;
+}
+
+/* Modal Content and Body */
+#contentModal .modal-content {
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+#contentModal .modal-body {
+    flex: 1; 
+    max-height: var(--modal-body-max-height);
+    overflow-y: auto; 
+    overflow-x: hidden; 
+}
+
+/* Attendee Card Styling */
+.selected-attendee-card {
+    min-height: 308px;
+}
+
+.card {
+    margin-bottom: 10px; 
+    border: 1px solid #ccc;
+    padding: 15px; 
+    cursor: pointer;
+    transition: var(--card-transition);
+}
+
+/* Hover Effect for Cards */
+.card:hover {
+    transform: scale(1.05);
+}
+
+/* Selected Card Styling */
+.attendee-card {
+    position: relative;
+}
+
+.attendee-card.selected {
+    border: 2px solid var(--selected-border-color);
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+}
+
+/* Responsive Adjustments */
+
+/* Small Devices (max-width: 576px) */
+@media (max-width: 576px) {
+    #contentModal .modal-dialog {
+        width: 100%;
+        height: 90%;
+    }
+
+    #contentModal .modal-body {
+        max-height: 400px;
+    }
+
+    .selected-attendee-card {
+        min-height: 250px;
+    }
+}
+
+/* Medium Devices (min-width: 576px and max-width: 768px) */
+@media (min-width: 576px) and (max-width: 768px) {
+    #contentModal .modal-dialog {
+        width: 90%;
+        height: 85%;
+    }
+
+    .selected-attendee-card {
+        min-height: 280px;
+    }
+}
+
+/* Large Devices (min-width: 768px and max-width: 1200px) */
+@media (min-width: 768px) and (max-width: 1200px) {
+    #contentModal .modal-dialog {
+        width: 80%;
+        height: 80%;
+    }
+
+    .selected-attendee-card {
+        min-height: 308px;
+    }
+}
+
+/* Extra Large Devices (min-width: 1200px) */
+@media (min-width: 1200px) {
+    #contentModal .modal-dialog {
+        width: 70%;
+        height: 75%;
+    }
+
+    .selected-attendee-card {
+        min-height: 320px;
+    }
+}
+
+@media (min-width: 2200px) {
+    .attendee-card {
+        flex: 0 0 auto;
+        width: 8.33333%; /* Equivalent to col-1 */
+    }
+}
