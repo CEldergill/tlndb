@@ -1,6 +1,6 @@
 <?php
 $client_id = getenv('CLIENT_ID');
-$redirect_uri = 'http://localhost:80/callback.php';
+$redirect_uri = 'https://www.tlndb.remote.ac/callback';
 $state = bin2hex(random_bytes(16)); // CSRF protection
 
 // Redirect to Roblox OAuth 2.0 authorization endpoint
