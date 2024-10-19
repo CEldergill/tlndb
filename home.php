@@ -129,5 +129,6 @@ if ($selected_navy === "NBN") {
         crossorigin="anonymous">
     </script>
 </body>
+<?php include 'components/footer.html'; ?>
 
 </html>
