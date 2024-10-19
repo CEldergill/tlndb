@@ -102,28 +102,6 @@ if ($selected_navy === "NBN") {
         </div>
     </main>
 
-
-    <script>
-        function setupTokenAlert() {
-            const tokenExpiryTime = Date.now() + (<?php echo $_SESSION['access']['expiry']; ?> * 1000); // Current time + expiry duration
-
-            // Check token expiry every minute (60000 milliseconds)
-            const interval = setInterval(() => {
-                const currentTime = Date.now();
-
-                // Check if the token has expired
-                if (currentTime >= tokenExpiryTime) {
-                    clearInterval(interval); // Stop the interval check
-                    alert("Your session has expired. Please log in again."); // Alert the user
-                    window.location.href = "index.php";
-                }
-            }, 30000); // Check every 1 minute
-        }
-
-
-        setupTokenAlert();
-    </script>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous">
