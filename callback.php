@@ -4,7 +4,7 @@ session_start();
 
 $client_secret = getenv('CLIENT_SECRET');
 $client_id = getenv('CLIENT_ID');
-$redirect_uri = 'https://www.tlndb/callback.php';
+$redirect_uri = 'https://www.tlndb.remote.ac/callback';
 
 if (isset($_GET['code'])) {
     $code = $_GET['code'];
