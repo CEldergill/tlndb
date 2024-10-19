@@ -119,7 +119,7 @@ if ($selected_navy === "NBN") {
     </main>
 
     <div class="container">
-        <footer class="fixed-bottom py-3 my-4">
+        <footer class="fixed-bottom my-1">
             <ul class="nav justify-content-center border-bottom pb-3 mb-3">
                 <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Tradelands</a></li>
                 <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Wiki</a></li>
