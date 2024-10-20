@@ -55,14 +55,15 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
     $citizensFromDb = citizenFromDb($conn, $faction_id, $citizen_id);
     $navyFromDb = navyFromDb($conn, $faction_id, $citizen_id);
     $navyDbMembers = array_column($navyFromDb, 0);
+    $allFromDb = allFromDb($conn, $faction_id);
 
     $usersToAdd = !empty($navyGroupMembers)
-        ? array_diff($navyGroupMembers, $navyDbMembers) : [];
+        ? array_diff($navyGroupMembers, $allFromDb) : [];
 
     var_dump($usersToAdd);
 
     $usersToAmmend = !empty($navyGroupMembers)
-        ? array_diff($navyGroupMembers, $citizensFromDb) : [];
+        ? array_intersect($navyGroupMembers, $citizensFromDb) : [];
 
     $usersToRemove = !empty($navyDbMembers)
         ? array_diff($navyDbMembers, $navyGroupMembers) : [];
