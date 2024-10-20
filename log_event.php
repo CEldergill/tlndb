@@ -421,6 +421,7 @@ if ($event_types_result) {
         // Hide the co-host card
         document.getElementById('coHostCard').style.display = 'none';
         document.getElementById('coHostCard').innerHTML = '';
+        console.log(cohost);
         $(`.attendee-card-inner:contains('${coHost}')`).css({
             'background-color': 'light',
             'cursor': 'pointer'
