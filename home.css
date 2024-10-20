@@ -1,5 +1,5 @@
 .header-section {
-    background: linear-gradient(135deg, #007bff, #6610f2);
+    background: linear-gradient(135deg, grey, #262627);
     color: white;
     padding: 60px 0;
 }
@@ -33,8 +33,19 @@
 }
 
 footer {
-    background-color: #212529;
     color: white;
     padding: 20px 0;
     text-align: center;
+}
+html,body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
 }

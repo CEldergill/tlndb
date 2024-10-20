@@ -95,8 +95,8 @@ $cards = [
         <!-- Header Section -->
         <section class="header-section text-center">
             <div class="container">
-                <h1>Welcome to the <?php safeEcho($navy); ?> Navy Dashboard</h1>
-                <h3><?php echo $rank . " " . $userName; ?></h3>
+                <h1 class="display-3 fw-bold">Welcome to the <?php safeEcho($navy); ?> Navy Dashboard</h1>
+                <h3 class="fw-normal text-muted mb-3"><?php echo $rank . " " . $userName; ?></h3>
             </div>
         </section>
 
