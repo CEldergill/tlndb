@@ -1,6 +1,6 @@
 <?php
 session_start();
-header("Location: maintenance");
+//header("Location: maintenance");
 
 if (isset($_SESSION['error'])) {
     $error_message = $_SESSION['error']; // Store the error message
