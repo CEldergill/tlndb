@@ -1,0 +1,40 @@
+.header-section {
+    background: linear-gradient(135deg, #007bff, #6610f2);
+    color: white;
+    padding: 60px 0;
+}
+
+.header-section h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.header-section h3 {
+    font-size: 1.5rem;
+    font-weight: 300;
+}
+
+/* Card Styling */
+.card {
+    background-color: #f8f9fa;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card i {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #007bff;
+}
+
+footer {
+    background-color: #212529;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
