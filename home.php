@@ -117,8 +117,8 @@ $cards = [
             </div>
         </section>
 
-        <section class="text-center bg-body-tertiary">
-            <div class="container row text-center">
+        <section class="header-section text-center bg-body-tertiary">
+            <div class="container row">
                 <h1 class="display-3 fw-bold">Example Text</h1>
             </div>
         </section>
