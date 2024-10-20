@@ -580,16 +580,14 @@ if ($event_types_result) {
         let endMinutes = convertToMinutes(endTime);
 
         if (endMinutes < startMinutes) {
-            endMinutes += 24 * 60;
+            endMinutes += 24 * 60; // Adjust for overnight event
         }
 
-        const timeDifference = endMinutes - startMinutes;
 
-        // If `endTime` is before `startTime` or has a suspiciously large duration:
-        if (timeDifference > 24 * 60 || timeDifference < 0) {
-            proceed = confirm("The start time is potentially after the end time. Please double check and confirm if you are happy to continue.");
+
+        if (startMinutes >= endMinutes) {
+            proceed = confirm("Possible invalid time range. End time must be after start time. Please confirm this is correct.");
         }
-
         if (!proceed) {
             return;
         }
