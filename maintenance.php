@@ -31,12 +31,8 @@
     <div class="content-container position-absolute top-50 start-50 translate-middle d-flex flex-column align-items-center">
         <h1 class="title text-center">Tradelands Navy Dashboard</h1>
         <div class="cover-page text-center">
-            <h3>Select Your Navy</h3>
+            <h3>Not Available</h3>
             <hr>
-            <div class="d-flex justify-content-between">
-                <div class="selection-button button1 disabled" data-option="NBN"></div>
-                <div class="selection-button button2 disabled" data-option="WCN"></div>
-            </div>
             <p>TLNDB is currently undergoing maintenance. Please retry later.</p>
             <button id="loginButton" class="btn btn-primary btn-lg" onclick="location.href = 'login.php'" disabled>Login with Roblox</button>
         </div>
