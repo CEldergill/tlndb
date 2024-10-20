@@ -65,7 +65,7 @@ $pfp_link = $user['picture'];
 
     <?php if ($id === '89370200') { ?>
         <!-- Select Navy for moderators -->
-        <select class="form-select" aria-label="Select Navy">
+        <select class="form-select" id="navySelect" aria-label="Select Navy">
             <option selected>Select Navy</option>
             <option value="1">Nova Balreska</option>
             <option value="2">Whitecrest Navy</option>
