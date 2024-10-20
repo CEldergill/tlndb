@@ -60,8 +60,6 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
     $usersToAdd = !empty($navyGroupMembers)
         ? array_diff($navyGroupMembers, $allFromDb) : [];
 
-    var_dump($usersToAdd);
-
     $usersToAmmend = !empty($navyGroupMembers)
         ? array_intersect($navyGroupMembers, $citizensFromDb) : [];
 
