@@ -66,7 +66,7 @@ $pfp_link = $user['picture'];
     <!-- Navigation Options -->
     <ul class="nav nav-pills">
         <li class="nav-item">
-            <a href="home.php" class="nav-link <?php echo ($activePage == 'home') ? 'active' : ''; ?>">Home</a>
+            <a href="home" class="nav-link <?php echo ($activePage == 'home') ? 'active' : ''; ?>">Home</a>
         </li>
         <li class="nav-item dropdown">
             <button class="nav-link limited dropdown-toggle <?php echo ($activePage == 'log_event') ? 'active' : ''; ?>" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
