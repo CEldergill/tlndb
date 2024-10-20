@@ -45,7 +45,6 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
 
     // Accesses group members
     $navyFromGroup = getNavyMembers($group_id);
-    var_dump($navyFromGroup);
     $navyGroupMembers = array_column($navyFromGroup, 0);
 
     // Maps rank name to rank id for each userid
@@ -56,7 +55,6 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
     $citizensFromDb = citizenFromDb($conn, $faction_id, $citizen_id);
     $navyFromDb = navyFromDb($conn, $faction_id, $citizen_id);
     $navyDbMembers = array_column($navyFromDb, 0);
-    var_dump($navyFromDb);
 
     $usersToAdd = !empty($navyGroupMembers) && !empty($navyDbMembers)
         ? array_diff($navyGroupMembers, $navyDbMembers) : [];
@@ -82,6 +80,7 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
         $stmtAddRank = $conn->prepare("INSERT INTO rank_history (member_id, rank_id, effective_date) VALUES (?, ?, ?)");
 
         foreach ($userArray as $user) {
+            var_dump($userArray);
             if ($user) {
                 $userid = $user[0];
                 $pfp = $user[1];
