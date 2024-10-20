@@ -55,6 +55,6 @@ function getPfp($array)
         // Close cURL for this iteration
         curl_close($ch);
     }
-
+    print_r($pfpArray);
     return $pfpArray;
 }
