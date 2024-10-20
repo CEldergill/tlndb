@@ -2,16 +2,6 @@
     padding: 60px 0;
 }
 
-.header-section h1 {
-    font-size: 3.5rem;
-    font-weight: bold;
-}
-
-.header-section h3 {
-    font-size: 2rem;
-    font-weight: 300;
-}
-
 /* Card Styling */
 .card {
     background-color: #f8f9fa;
