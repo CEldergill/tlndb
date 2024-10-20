@@ -26,7 +26,7 @@ function getPfp($array)
         return [];
     }
 
-    print_r($pfp_response)
+    print_r($pfp_response);
 
     // Decode the JSON response
     $pfp_data = json_decode($pfp_response, true);
