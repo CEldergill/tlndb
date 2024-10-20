@@ -579,21 +579,7 @@ if ($event_types_result) {
         const startMinutes = convertToMinutes(startTime);
         let endMinutes = convertToMinutes(endTime);
 
-        if (endMinutes <= startMinutes) {
-            // Check if it could be an overnight event
-            if (startMinutes < endMinutes + 24 * 60) {
-                // If it's a valid overnight event
-                endMinutes += 24 * 60; // Adjust for overnight event
-            } else {
-                // Invalid time range
-                alert("Invalid time range. End time must be after start time on the same day.");
-                return; // Prevent any further action
-            }
-        }
-
-        // If we reach here, the time range is valid (either same day or overnight)
-        if (startMinutes >= endMinutes) {
-            // User confirmation for ambiguous cases
+        if (endMinutes < startMinutes) {
             const userConfirmed = confirm("Possible invalid time range. End time is before start time on the next day. Please confirm this is correct.");
             if (!userConfirmed) {
                 return; // Exit if the user does not confirm
