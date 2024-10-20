@@ -63,7 +63,7 @@ $result = $stmt->get_result();
 $date = $result->fetch_assoc();
 if ($date) {
     // Extract the join date
-    $user_join_datetime = $row['join_date'];
+    $user_join_datetime = $date['join_date'];
 
     // Convert to DateTime object and format to date
     $user_join_date = (new DateTime($user_join_datetime))->format('Y-m-d');
