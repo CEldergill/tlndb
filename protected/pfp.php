@@ -8,6 +8,8 @@ function getPfp($array)
     // Convert the array to a comma-separated string of IDs
     $ids = implode(',', array_map('strval', $array));
 
+    print_r($ids);
+
     // Batch request to fetch multiple profile pictures at once
     $pfp_url = "https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=$ids&size=420x420&format=Png&isCircular=false";
 
