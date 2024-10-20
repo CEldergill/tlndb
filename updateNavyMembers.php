@@ -12,7 +12,7 @@ if (!isset($_GET['key']) || $_GET['key'] !== $secretKey) {
 require("protected/getNavy.php");
 require("protected/getNavyFromDb.php");
 require("protected/pfp.php");
-require("../includes/db.php");
+require("includes/db.php");
 
 $rank_mapping = [
     'Citizen' => 1,
