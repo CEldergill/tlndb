@@ -1,19 +1,3 @@
-<?php
-session_start();
-require 'includes/token_manager.php';
-
-$client_secret = getenv('CLIENT_SECRET');
-$client_id = getenv('CLIENT_ID');
-
-if (isset($_SESSION['access']['expiry']) && time() >= ($_SESSION['access']['expiry'] - 300)) {
-    if (!refreshAccessToken($client_id, $client_secret)) {
-        $_SESSION['error'] = "Error: Unable to refresh access token.";
-        header("Location: index.php");
-        exit();
-    }
-}
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 

@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['user'])) {
+    $_SESSION['error'] = "Not authenticated. Please retry.";
+    exit();
+}
+
 $client_secret = getenv('CLIENT_SECRET');
 $client_id = getenv('CLIENT_ID');
 
@@ -29,9 +34,12 @@ $rank = $user['rank'];
 if ($selected_navy === "NBN") {
     $navy = "Nova Balreska";
     $navy_img = "assets/nbn.png";
-} else {
+} else if ($selected_navy === "WCN") {
     $navy = "Whitecrest";
     $navy_img = "assets/wcn.png";
+} else {
+    exit();
+    $_SESSION['error'] = "No navy authenticated. Please retry.";
 }
 ?>
 

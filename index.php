@@ -58,7 +58,6 @@ $selectedOption = isset($_SESSION['selected_navy']) ? $_SESSION['selected_navy']
             <?php endif; ?>
         </div>
     </div>
-    <?php include_once("components/footer.html"); ?>
 
     <script>
         $(document).ready(function() {
