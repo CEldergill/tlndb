@@ -132,7 +132,7 @@ $sql = "SELECT \n"
 
     . "ORDER BY \n"
 
-    . "    e.id;";
+    . "    e.id DESC;";
 
 
 
