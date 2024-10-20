@@ -23,11 +23,11 @@ if (isset($_SESSION['access']['expiry']) && time() >= ($_SESSION['access']['expi
     <title>Tradelands Navy Database</title>
 </head>
 
-<body>
+<body mx-2>
     <?php include_once("components/nav.php"); ?>
 
     <h1>Privacy Policy</h1>
-    <p><strong>Last updated:</strong> 20/10/2024</p>
+    <p><strong>Last updated:</strong> 20th October 2024</p>
 
     <h2>1. Information We Collect</h2>
     <p>When you log in to the Website using your Roblox account via OAuth 2.0, we collect the following information from your Roblox account:</p>

@@ -23,11 +23,11 @@ if (isset($_SESSION['access']['expiry']) && time() >= ($_SESSION['access']['expi
     <title>Tradelands Navy Database</title>
 </head>
 
-<body>
+<body mx-2>
     <?php include_once("components/nav.php"); ?>
 
     <h1>Terms and Conditions</h1>
-    <p><strong>Last updated:</strong> [Date]</p>
+    <p><strong>Last updated:</strong> 20th October 2024</p>
 
     <h2>1. Acceptance of Terms</h2>
     <p>By accessing and using Tradelands Navy Database (hereinafter referred to as "the Website"), you agree to comply with and be bound by these Terms and Conditions, as well as any applicable laws and regulations. If you do not agree with these terms, you are prohibited from using or accessing the Website.</p>

@@ -6,7 +6,7 @@ $user = $_SESSION['user'];
 $rank = $user['rank'];
 
 // Testing purposes only
-if ($userName === "Cjegames") {
+if ($user['preferred_username'] === "Cjegames") {
     $rank = "Commander";
 }
 
