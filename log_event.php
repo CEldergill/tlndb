@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['user'])) {
+    $_SESSION['error'] = "Not authenticated. Please retry.";
+    exit();
+}
 $activePage = 'log_event';
 require 'includes/token_manager.php';
 require 'includes/db.php';

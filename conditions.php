@@ -1,14 +1,57 @@
+<?php
+session_start();
+if (isset($_SESSION['user'])) {
+    require 'includes/token_manager.php';
+
+    $client_secret = getenv('CLIENT_SECRET');
+    $client_id = getenv('CLIENT_ID');
+
+    if (isset($_SESSION['access']['expiry']) && time() >= ($_SESSION['access']['expiry'] - 300)) {
+        if (!refreshAccessToken($client_id, $client_secret)) {
+            $_SESSION['error'] = "Error: Unable to refresh access token.";
+            header("Location: index.php");
+            exit();
+        }
+    }
+    $auth = true;
+} else {
+    $auth = false;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <title>Tradelands Navy Database</title>
 </head>
 
 <body>
-    <?php include_once("components/nav.php"); ?>
+    <?php if ($auth) {
+        include_once("components/nav.php");
+    } else { ?>
+        <nav class="d-flex flex-wrap justify-content-between align-items-center py-3 px-3 bg-dark text-light">
+            <!-- Logos -->
+            <div class="d-flex align-items-center me-auto">
+                <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-5 text-decoration-none">
+                    <img src="assets/logo-white.png" alt="Tradelands" width="204" height="60">
+                </a>
+            </div>
+
+            <!-- Navigation Options -->
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a href="index.php" class="nav-link btn btn-primary">Login</a></li>
+            </ul>
+
+            <!-- Profile Picture -->
+            <div class="profile-picture ms-3">
+                <img src="assets/default-profile.png" alt="Profile" width="48" height="48" class="rounded-circle">
+            </div>
+        </nav>
+    <?php } ?>
 
     <div class="container mx-3 my-3">
         <h1>Terms and Conditions</h1>
