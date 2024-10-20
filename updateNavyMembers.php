@@ -71,7 +71,7 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
         $groupMembersAssoc = array_column($navyFromGroup, null, 0);
 
         foreach ($userArray as &$navyMember) {
-            $userId = $navyMember[0] ?? null;
+            $userId = $navyMember['id'] ?? null;
             if ($userId && isset($groupMembersAssoc[$userId])) {
                 $navyMember = array_merge($navyMember, $groupMembersAssoc[$userId]);
             }
@@ -79,6 +79,8 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
 
         $stmtAddMember = $conn->prepare("INSERT INTO members (id, username, rank_id, image_link, faction_id) VALUES (?, ?, ?, ?, ?)");
         $stmtAddRank = $conn->prepare("INSERT INTO rank_history (member_id, rank_id, effective_date) VALUES (?, ?, ?)");
+
+        print_r($userArray);
 
         foreach ($userArray as $user) {
             if ($user) {
