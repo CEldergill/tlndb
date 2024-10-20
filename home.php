@@ -93,7 +93,7 @@ $cards = [
 
     <main>
         <!-- Header Section -->
-        <section class="header-section text-center">
+        <section class="header-section text-center bg-tertiary">
             <div class="container">
                 <h1 class="display-3 fw-bold">Welcome to the <?php safeEcho($navy); ?> Navy Dashboard</h1>
                 <h3 class="fw-normal text-muted mb-3"><?php echo $rank . " " . $userName; ?></h3>
@@ -114,6 +114,12 @@ $cards = [
                         </div>
                     </div>
                 <?php endforeach; ?>
+            </div>
+        </section>
+
+        <section class="text-center bg-tertiary">
+            <div class="container row text-center">
+                <h1 class="display-3 fw-bold">Example Text</h1>
             </div>
         </section>
     </main>
