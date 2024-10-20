@@ -1,3 +1,6 @@
+<?php //header("Location: index"); 
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,43 +40,6 @@
             <button id="loginButton" class="btn btn-primary btn-lg" onclick="location.href = 'login.php'" disabled>Login with Roblox</button>
         </div>
     </div>
-
-    <script>
-        $(document).ready(function() {
-            let selectedNavy = null;
-
-            // Handle selection of options
-            $('.selection-button').click(function() {
-                // Deselect all buttons
-                $('.selection-button').removeClass('active').css('filter', 'grayscale(100%)');
-
-                // Select the clicked button
-                selectedNavy = $(this).data('option'); // Get option from data attribute
-                $(this).addClass('active').css('filter', 'grayscale(0%)');
-                $('#loginButton').prop('disabled', !selectedNavy); // Enable the login button only if a navy option is selected
-            });
-
-            // Handle login button click
-            $('#loginButton').click(function() {
-                if (selectedNavy) {
-                    // Store the selected option in a session variable via AJAX
-                    $.post('navy_option.php', {
-                            selected_navy: selectedNavy
-                        })
-                        .done(function(response) {
-                            // Handle successful response if needed
-                            console.log('Success:', response);
-                        })
-                        .fail(function(jqXHR, textStatus, errorThrown) {
-                            // Handle error
-                            console.error('Error:', textStatus, errorThrown);
-                            alert('An error occurred while processing your request. Please try again.');
-                        });
-                }
-            });
-        });
-    </script>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
