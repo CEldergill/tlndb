@@ -62,6 +62,8 @@ $pfp_link = $user['picture'];
         </a>
         <img src="<?php echo $navy_img ?>" alt="Navy" width="100" height="60">
     </div>
+
+    <!-- Select Navy for moderators -->
     <?php if ($id === 89370200) { ?>
         <select class="form-select" aria-label="Select Navy">
             <option selected>Select Navy</option>
