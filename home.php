@@ -104,8 +104,8 @@ $cards = [
         <section class="container my-5">
             <div class="row text-center">
                 <?php foreach ($cards as $card): ?>
-                    <div class="col-lg-3 col-md-6 mb-4 d-flex">
-                        <div class="card h-100 shadow-sm p-4 rounded">
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="card shadow-sm p-4 rounded">
                             <div class="card-body d-flex flex-column justify-content-center">
                                 <i class="fas <?php echo $card['icon']; ?>"></i>
                                 <h5 class="card-title mt-3"><?php echo $card['title']; ?></h5>
@@ -117,7 +117,7 @@ $cards = [
             </div>
         </section>
 
-        <section class="text-center bg-body-tertiary d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <section class="text-center bg-body-tertiary d-flex justify-content-center align-items-center" style="height: 10vh;">
             <div class="container">
                 <h1 class="display-3 fw-bold">Example Text</h1>
             </div>
