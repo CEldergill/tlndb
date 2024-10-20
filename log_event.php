@@ -448,7 +448,7 @@ if ($event_types_result) {
             $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').show();
         } else {
             // Remove attendee if already selected
-            if (index === -1) {
+            if (index !== -1) {
                 selectedAttendees.splice(index, 1);
                 $(`.attendee-card-inner:contains('${attendee}')`).find('.checkmark').hide();
             }
