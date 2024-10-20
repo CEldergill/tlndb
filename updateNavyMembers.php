@@ -56,13 +56,13 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
     $navyFromDb = navyFromDb($conn, $faction_id, $citizen_id);
     $navyDbMembers = array_column($navyFromDb, 0);
 
-    $usersToAdd = !empty($navyGroupMembers) && !empty($navyDbMembers)
+    $usersToAdd = !empty($navyGroupMembers)
         ? array_diff($navyGroupMembers, $navyDbMembers) : [];
 
-    $usersToAmmend = !empty($navyGroupMembers) && !empty($citizensFromDb)
+    $usersToAmmend = !empty($navyGroupMembers)
         ? array_diff($navyGroupMembers, $citizensFromDb) : [];
 
-    $usersToRemove = !empty($navyDbMembers) && !empty($navyGroupMembers)
+    $usersToRemove = !empty($navyDbMembers)
         ? array_diff($navyDbMembers, $navyGroupMembers) : [];
 
     if (!empty($usersToAdd)) {
@@ -80,7 +80,6 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
         $stmtAddRank = $conn->prepare("INSERT INTO rank_history (member_id, rank_id, effective_date) VALUES (?, ?, ?)");
 
         foreach ($userArray as $user) {
-            var_dump($userArray);
             if ($user) {
                 $userid = $user[0];
                 $pfp = $user[1];
