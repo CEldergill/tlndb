@@ -3,6 +3,7 @@ session_start();
 
 if (!isset($_SESSION['user'])) {
     $_SESSION['error'] = "Not authenticated. Please retry.";
+    header("Location: index.php");
     exit();
 }
 
@@ -15,7 +16,7 @@ require 'includes/token_manager.php';
 if (isset($_SESSION['access']['expiry']) && time() >= ($_SESSION['access']['expiry'] - 300)) {
     if (!refreshAccessToken($client_id, $client_secret)) {
         $_SESSION['error'] = "Error: Unable to refresh access token.";
-        //header("Location: index.php");
+        header("Location: index.php");
         exit();
     }
 }
@@ -38,8 +39,9 @@ if ($selected_navy === "NBN") {
     $navy = "Whitecrest";
     $navy_img = "assets/wcn.png";
 } else {
-    exit();
     $_SESSION['error'] = "No navy authenticated. Please retry.";
+    header("Location: index.php");
+    exit();
 }
 ?>
 
