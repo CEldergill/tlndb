@@ -1,15 +1,3 @@
-<?php
-session_start();
-header("Location: maintenance");
-
-if (isset($_SESSION['error'])) {
-    $error_message = $_SESSION['error']; // Store the error message
-    unset($_SESSION['error']); // Clear the error message after storing it
-}
-
-$selectedOption = isset($_SESSION['selected_navy']) ? $_SESSION['selected_navy'] : null;
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,17 +34,11 @@ $selectedOption = isset($_SESSION['selected_navy']) ? $_SESSION['selected_navy']
             <h3>Select Your Navy</h3>
             <hr>
             <div class="d-flex justify-content-between">
-                <div class="selection-button button1" data-option="NBN"></div>
-                <div class="selection-button button2" data-option="WCN"></div>
+                <div class="selection-button button1 disabled" data-option="NBN"></div>
+                <div class="selection-button button2 disabled" data-option="WCN"></div>
             </div>
-            <p>Click the button below to authenticate using your Roblox account.</p>
+            <p>TLNDB is currently undergoing maintenance. Please retry later.</p>
             <button id="loginButton" class="btn btn-primary btn-lg" onclick="location.href = 'login.php'" disabled>Login with Roblox</button>
-
-            <?php if (isset($error_message)): ?>
-                <div class="error-message">
-                    <?php echo htmlspecialchars($error_message); ?>
-                </div>
-            <?php endif; ?>
         </div>
     </div>
 
@@ -101,6 +83,3 @@ $selectedOption = isset($_SESSION['selected_navy']) ? $_SESSION['selected_navy']
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 </body>
-
-
-</html>
