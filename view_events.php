@@ -227,6 +227,14 @@ $events_result = $stmt->get_result();
 </body>
 
 <script>
+    $(document).ready(function() {
+        $('.table').DataTable({
+            "paging": true,
+            "ordering": true,
+            "info": true
+        });
+    });
+
     document.addEventListener("DOMContentLoaded", function() {
         function showModal(content, type) {
             const modalContent = document.getElementById("modalContent");
