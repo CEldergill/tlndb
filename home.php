@@ -119,7 +119,7 @@ $cards = [
 
         <section class="text-center bg-body-tertiary d-flex justify-content-center align-items-center" style="height: 40vh;">
             <div class="container">
-                <h1 class="display-3 fw-bold">Example Text</h1>
+                <h3 class="display-3 fw-bold">Example Text</h1>
             </div>
         </section>
 
