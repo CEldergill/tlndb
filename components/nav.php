@@ -63,15 +63,15 @@ $pfp_link = $user['picture'];
         <img src="<?php echo $navy_img ?>" alt="Navy" width="100" height="60">
     </div>
 
-    <!-- Select Navy for moderators -->
-    <?php if ($id === 89370200) { ?>
+    <?php if ($id === '89370200') { ?>
+        <!-- Select Navy for moderators -->
         <select class="form-select" aria-label="Select Navy">
             <option selected>Select Navy</option>
             <option value="1">Nova Balreska</option>
             <option value="2">Whitecrest Navy</option>
         </select>
+        <input type="hidden" id="selectedNavy" name="selectedNavy" value="">
     <?php } ?>
-    <input type="hidden" id="selectedNavy" name="selectedNavy" value="">
 
     <!-- Navigation Options -->
     <ul class="nav nav-pills">
