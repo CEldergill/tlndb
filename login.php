@@ -1,4 +1,10 @@
 <?php
+session_start();
+if (!isset($_SESSION['user'])) {
+    $_SESSION['error'] = "No group selected. Please retry.";
+    header("Location: index.php");
+    exit();
+}
 $client_id = getenv('CLIENT_ID');
 $redirect_uri = 'https://www.tlndb.remote.ac/callback';
 $state = bin2hex(random_bytes(16)); // CSRF protection
