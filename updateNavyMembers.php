@@ -9,9 +9,9 @@ if (!isset($_GET['key']) || $_GET['key'] !== $secretKey) {
     exit;
 }
 
-require("getNavy.php");
-require("getNavyFromDb.php");
-require("pfp.php");
+require("protected/getNavy.php");
+require("protected/getNavyFromDb.php");
+require("protected/pfp.php");
 require("../includes/db.php");
 
 $rank_mapping = [
