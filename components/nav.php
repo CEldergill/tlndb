@@ -62,6 +62,13 @@ $pfp_link = $user['picture'];
         </a>
         <img src="<?php echo $navy_img ?>" alt="Navy" width="100" height="60">
     </div>
+    <div class="dropdown">
+        <a href="#">Dropdown</a>
+        <div class="dropdown-content">
+            <a href="#">1</a>
+            <a href="#">2</a>
+        </div>
+    </div>
 
     <!-- Navigation Options -->
     <ul class="nav nav-pills">
