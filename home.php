@@ -63,12 +63,13 @@ $user_days_in_navy = $date ? date_diff(new DateTime($date['join_date']), new Dat
 // Card data (easily extendable)
 $cards = [
     ["title" => "Days in the Navy", "value" => $user_days_in_navy, "icon" => "fa-ship"],
-    ["title" => "Events Attended", "value" => "No Data Available in Testing", "icon" => "fa-calendar-check"],
-    ["title" => "Events Hosted", "value" => "No Data Available in Testing", "icon" => "fa-calendar-alt"],
+    ["title" => "Events Attended", "value" => "No Data Available in Testing", "icon" => "fa-hashtag"],
+    ["title" => "Events Hosted", "value" => "No Data Available in Testing", "icon" => "fa-bullhorn"],
     ["title" => "Promotion Date", "value" => "No Data Available in Testing", "icon" => "fa-chevron-up"],
-    ["title" => "Days as $rank", "value" => "No Data Available in Testing", "icon" => "fa-calendar-week"],
-    ["title" => "Events as $rank", "value" => "No Data Available in Testing", "icon" => "fa-ranking-star"],
-    ["title" => "Last Event Attended", "value" => "No Data Available in Testing", "icon" => "fa-calendar-day"]
+    ["title" => "Days as $rank", "value" => "No Data Available in Testing", "icon" => "fa-user-clock"],
+    ["title" => "Events as $rank", "value" => "No Data Available in Testing", "icon" => "fa-star"],
+    ["title" => "Last Event Attended", "value" => "No Data Available in Testing", "icon" => "fa-calendar-day"],
+    ["title" => "Medals", "value" => "No Data Available in Testing", "icon" => "fa-medal"]
 ];
 
 ?>
