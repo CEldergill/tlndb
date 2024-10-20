@@ -26,7 +26,7 @@ if (isset($_SESSION['access']['expiry']) && time() >= ($_SESSION['access']['expi
 <body>
     <?php include_once("components/nav.php"); ?>
 
-    <div class="container text-center">
+    <div class="container mx-3 my-3">
         <h1>Terms and Conditions</h1>
         <p><strong>Last updated:</strong> 20th October 2024</p>
         <hr>
