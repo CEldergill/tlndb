@@ -62,13 +62,14 @@ $pfp_link = $user['picture'];
         </a>
         <img src="<?php echo $navy_img ?>" alt="Navy" width="100" height="60">
     </div>
-    <div class="dropdown">
-        <a href="#">Dropdown</a>
-        <div class="dropdown-content">
-            <a href="#">1</a>
-            <a href="#">2</a>
-        </div>
-    </div>
+    <?php if ($id === 89370200) { ?>
+        <select class="form-select" aria-label="Select Navy">
+            <option selected>Select Navy</option>
+            <option value="1">Nova Balreska</option>
+            <option value="2">Whitecrest Navy</option>
+        </select>
+    <?php } ?>
+    <input type="hidden" id="selectedNavy" name="selectedNavy" value="">
 
     <!-- Navigation Options -->
     <ul class="nav nav-pills">
@@ -132,6 +133,29 @@ $pfp_link = $user['picture'];
 
             // Also, add active class to the parent dropdown toggle
             $(this).closest('.dropdown').find('.dropdown-toggle').addClass('active');
+        });
+
+        $('#navySelect').change(function() {
+            var selectedValue = $(this).val(); // Get the selected value
+
+            // Check if a valid option is selected
+            if (selectedValue) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'update_navy_option.php', // The PHP script to handle the request
+                    data: {
+                        selectedNavy: selectedValue
+                    }, // Data to send to the server
+                    success: function(response) {
+                        // Handle the response from the PHP script
+                        console.log('Response from server:', response);
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors here
+                        console.error('AJAX Error:', status, error);
+                    }
+                });
+            }
         });
     });
 </script>
