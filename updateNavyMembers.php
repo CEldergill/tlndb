@@ -43,9 +43,11 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
     $faction_id = $navy['faction_id'];
     $citizen_id = $navy['citizen_id'];
 
+    // Accesses group members
     $navyFromGroup = getNavyMembers($group_id);
     $navyGroupMembers = array_column($navyFromGroup, 0);
 
+    // Maps rank name to rank id for each userid
     $navyGroupMembersRank = array_map(function ($user) use ($rank_mapping) {
         return [$user[0], $rank_mapping[$user[2]] ?? null];
     }, $navyFromGroup);

@@ -11,6 +11,9 @@ function navyFromDb($conn, $faction_id, $citizen_id)
     $stmt->bind_param("ii", $faction_id, $citizen_id);
     $stmt->execute();
     $all_users_result = $stmt->get_result();
+
+    $attendeesArray = [];
+
     if ($all_users_result) {
         while ($row = mysqli_fetch_assoc($all_users_result)) {
             $attendeesArray[] = [$row['id'], $row['rank_id']];
@@ -33,8 +36,10 @@ function citizenFromDb($conn, $faction_id, $citizen_id)
     $stmt->bind_param("ii", $faction_id, $citizen_id);
     $stmt->execute();
     $all_users_result = $stmt->get_result();
+
+    $attendeesArray = [];
+
     if ($all_users_result) {
-        $attendeesArray = [];
         while ($row = mysqli_fetch_assoc($all_users_result)) {
             $attendeesArray[] = $row['id'];
         }
