@@ -107,7 +107,7 @@ WHERE
 GROUP BY 
     e.id, host.username, co_host.username, et.name, e.event_date, e.start_time, e.end_time, e.notes
 ORDER BY 
-    e.id";
+    e.id DESC";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $faction_id);
