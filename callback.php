@@ -61,20 +61,20 @@ if (isset($_GET['code'])) {
 
         if (!isset($_SESSION['user']['selected_navy'])) {
             $_SESSION['error'] = "Error: Unable to get access token.";
-            header("Location: index.php");
+            header("Location: index");
         }
 
         $_SESSION['user'] = array_merge($_SESSION['user'], $user_data);
 
-        header("Location: groupcheck.php");
+        header("Location: groupcheck");
         exit();
     } else {
         $_SESSION['error'] = "Error: Unable to get access token.";
-        header("Location: index.php");
+        header("Location: index");
         exit();
     }
 } else {
     $_SESSION['error'] = "Error: No authorization code provided.";
-    header("Location: index.php");
+    header("Location: index");
     exit();
 }

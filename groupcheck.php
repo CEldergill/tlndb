@@ -5,7 +5,7 @@ session_start();
 if (!isset($_SESSION['user'])) {
     // If no user data is found in the session, redirect to the login page
     $_SESSION['error'] = "No user data retrieved. Please retry.";
-    header("Location: index.php");
+    header("Location: index");
     exit();
 }
 
@@ -69,7 +69,7 @@ if ($selected_navy === "NBN") {
     $citizen_id = 17129601;
 } else {
     $_SESSION['error'] = "Group selection error. Please contact an adminstrator. " . $selected_navy;
-    header("Location: index.php");
+    header("Location: index");
     exit();
 }
 
@@ -90,7 +90,7 @@ $group_response = curl_exec($ch);
 
 if ($group_response === false) {
     $_SESSION['error'] = 'Curl error: ' . curl_error($ch);
-    header("Location: index.php");
+    header("Location: index");
     exit();
 }
 
@@ -98,7 +98,7 @@ $group_data = json_decode($group_response, true);
 
 if ($group_data === null) {
     $_SESSION['error'] = 'Error decoding JSON: ' . json_last_error_msg();
-    header("Location: index.php");
+    header("Location: index");
     exit();
 }
 
@@ -119,10 +119,10 @@ if (!empty($group_data['groupMemberships'])) {
 
 if (!$user_in_group) {
     $_SESSION['error'] = "You must be a navy member to access this page.";
-    header("Location: index.php");
+    header("Location: index");
 } else {
     unset($_SESSION['error']);
-    header("Location: home.php");
+    header("Location: home");
 }
 
 curl_close($ch);

@@ -9,7 +9,7 @@ if (isset($_SESSION['user'])) {
     if (isset($_SESSION['access']['expiry']) && time() >= ($_SESSION['access']['expiry'] - 300)) {
         if (!refreshAccessToken($client_id, $client_secret)) {
             $_SESSION['error'] = "Error: Unable to refresh access token.";
-            header("Location: index.php");
+            header("Location: index");
             exit();
         }
     }
@@ -43,7 +43,7 @@ if (isset($_SESSION['user'])) {
 
             <!-- Navigation Options -->
             <ul class="nav nav-pills">
-                <li class="nav-item"><a href="index.php" class="nav-link btn btn-primary">Login</a></li>
+                <li class="nav-item"><a href="index" class="nav-link btn btn-primary">Login</a></li>
             </ul>
 
             <!-- Profile Picture -->

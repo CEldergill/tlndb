@@ -2,7 +2,7 @@
 session_start();
 if (!isset($_SESSION['user'])) {
     $_SESSION['error'] = "Not authenticated. Please retry.";
-    header("Location: index.php");
+    header("Location: index");
     exit();
 }
 $activePage = 'log_event';
@@ -15,7 +15,7 @@ $client_id = getenv('CLIENT_ID');
 if (isset($_SESSION['access']['expiry']) && time() >= ($_SESSION['access']['expiry'] - 300)) {
     if (!refreshAccessToken($client_id, $client_secret)) {
         $_SESSION['error'] = "Error: Unable to refresh access token.";
-        header("Location: index.php");
+        header("Location: index");
         exit();
     }
 }
@@ -50,7 +50,7 @@ if ($userName === "Cjegames") {
 // Prevent Low Ranks from access.
 
 if ($rank === "Crewman" || $rank == "Able Crewman" || $rank == "Specialist") {
-    header("Location: home.php");
+    header("Location: home");
     exit();
 }
 

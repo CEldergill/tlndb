@@ -2,7 +2,7 @@
 session_start();
 if (!isset($_SESSION['user'])) {
     $_SESSION['error'] = "No group selected. Please retry.";
-    header("Location: index.php");
+    header("Location: index");
     exit();
 }
 $client_id = getenv('CLIENT_ID');
