@@ -65,7 +65,10 @@ $cards = [
     ["title" => "Days in the Navy", "value" => $user_days_in_navy, "icon" => "fa-ship"],
     ["title" => "Events Attended", "value" => "No Data Available in Testing", "icon" => "fa-calendar-check"],
     ["title" => "Events Hosted", "value" => "No Data Available in Testing", "icon" => "fa-calendar-alt"],
-    ["title" => "Promotion Date", "value" => "No Data Available in Testing", "icon" => "fa-chevron-up"]
+    ["title" => "Promotion Date", "value" => "No Data Available in Testing", "icon" => "fa-chevron-up"],
+    ["title" => "Days as $rank", "value" => "No Data Available in Testing", "icon" => "fa-calendar-week"],
+    ["title" => "Events as $rank", "value" => "No Data Available in Testing", "icon" => "fa-ranking-star"],
+    ["title" => "Last Event Attended", "value" => "No Data Available in Testing", "icon" => "fa-calendar-day"]
 ];
 
 ?>
@@ -93,7 +96,7 @@ $cards = [
 
     <main>
         <!-- Header Section -->
-        <section class="header-section text-center bg-body-tertiary">
+        <section class="header-section text-center bg-body-tertiary" style="height: 20vh;">
             <div class="container">
                 <h1 class="display-3 fw-bold">Welcome to the <?php safeEcho($navy); ?> Navy Dashboard</h1>
                 <h3 class="fw-normal text-muted mb-3"><?php echo $rank . " " . $userName; ?></h3>
@@ -117,9 +120,9 @@ $cards = [
             </div>
         </section>
 
-        <section class="text-center bg-body-tertiary d-flex justify-content-center align-items-center" style="height: 40vh;">
+        <section class="text-center bg-body-tertiary d-flex justify-content-center align-items-center" style="height: 20vh;">
             <div class="container">
-                <h3 class="display-3 fw-bold">Example Text</h1>
+                <h4 class="display-3 fw-bold">You are eligible for promotion.</h1>
             </div>
         </section>
 
