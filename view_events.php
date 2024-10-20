@@ -82,59 +82,32 @@ if ($all_users_result) {
 
 // GET EVENT LOG SQL
 
-$sql = "SELECT \n"
-
-    . "    e.id,\n"
-
-    . "    e.event_date AS event_date,\n"
-
-    . "    e.start_time AS start_time,\n"
-
-    . "    e.end_time AS end_time,\n"
-
-    . "    host.username AS host_name,\n"
-
-    . "    co_host.username AS co_host_name,\n"
-
-    . "    et.name AS event_type,\n"
-
-    . "    GROUP_CONCAT(members.username ORDER BY members.username ASC) AS attendees,\n"
-
-    . "    GROUP_CONCAT(members.image_link ORDER BY members.username ASC) AS attendee_images,\n"
-
-    . "    GROUP_CONCAT(rank.name ORDER BY members.username ASC) AS attendee_ranks,\n"
-
-    . "    e.notes\n"
-
-    . "FROM \n"
-
-    . "    event_log e\n"
-
-    . "LEFT JOIN members host ON e.host_id = host.id\n"
-
-    . "LEFT JOIN members co_host ON e.co_host_id = co_host.id\n"
-
-    . "LEFT JOIN event_attendees ea ON e.id = ea.event_id\n"
-
-    . "LEFT JOIN members ON ea.member_id = members.id\n"
-
-    . "LEFT JOIN rank ON members.rank_id = rank.id\n"
-
-    . "LEFT JOIN event_types et ON e.event_type_id = et.id\n"
-
-    . "WHERE \n"
-
-    . "    e.faction_id = ?\n"
-
-    . "GROUP BY \n"
-
-    . "    e.id, host.username, co_host.username, et.name, e.event_date, e.start_time, e.end_time, e.notes\n"
-
-    . "ORDER BY \n"
-
-    . "    e.id DESC;";
-
-
+$sql = "SELECT 
+    e.id,
+    e.event_date AS event_date,
+    e.start_time AS start_time,
+    e.end_time AS end_time,
+    host.username AS host_name,
+    co_host.username AS co_host_name,
+    et.name AS event_type,
+    GROUP_CONCAT(attendee.username ORDER BY attendee.username ASC) AS attendees,
+    GROUP_CONCAT(attendee.image_link ORDER BY attendee.username ASC) AS attendee_images,
+    GROUP_CONCAT(rank.name ORDER BY attendee.username ASC) AS attendee_ranks,
+    e.notes
+FROM 
+    event_log e
+LEFT JOIN members host ON e.host_id = host.id
+LEFT JOIN members co_host ON e.co_host_id = co_host.id
+LEFT JOIN event_attendees ea ON e.id = ea.event_id
+LEFT JOIN members attendee ON ea.member_id = attendee.id
+LEFT JOIN rank ON attendee.rank_id = rank.id
+LEFT JOIN event_types et ON e.event_type_id = et.id
+WHERE 
+    e.faction_id = ?
+GROUP BY 
+    e.id, host.username, co_host.username, et.name, e.event_date, e.start_time, e.end_time, e.notes
+ORDER BY 
+    e.id";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $faction_id);
