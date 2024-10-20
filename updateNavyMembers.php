@@ -79,6 +79,8 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
         $stmtAddMember = $conn->prepare("INSERT INTO members (id, username, rank_id, image_link, faction_id) VALUES (?, ?, ?, ?, ?)");
         $stmtAddRank = $conn->prepare("INSERT INTO rank_history (member_id, rank_id, effective_date) VALUES (?, ?, ?)");
 
+        var_dump($userArray);
+
         foreach ($userArray as $user) {
             if ($user) {
                 $userid = $user[0];
