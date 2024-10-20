@@ -21,6 +21,11 @@ if (isset($_SESSION['access']['expiry']) && time() >= ($_SESSION['access']['expi
     }
 }
 
+function safeEcho($string)
+{
+    echo htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+}
+
 #data
 $token = $_SESSION['access']['token'];
 $user = $_SESSION['user'];
@@ -43,6 +48,31 @@ if ($selected_navy === "NBN") {
     header("Location: index");
     exit();
 }
+
+// Days in Navy
+
+$sql = "SELECT m.join_date
+        FROM members AS m 
+        WHERE m.id = ?";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$date = $result->fetch_assoc();
+if ($date) {
+    // Extract the join date
+    $user_join_datetime = $row['join_date'];
+
+    // Convert to DateTime object and format to date
+    $user_join_date = (new DateTime($user_join_datetime))->format('Y-m-d');
+
+    // Calculate the difference between the join date and today
+    $user_days_in_navy = date_diff(new DateTime($user_join_date), new DateTime())->days;
+} else {
+    $user_days_in_navy = "No Data Found.";
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -93,7 +123,7 @@ if ($selected_navy === "NBN") {
                         <div class="card-body">
                             <h5 class="card-title">Days in the Navy</h5>
                             <hr>
-                            <h2>302</h2>
+                            <h2><?php safeEcho($user_days_in_navy) ?></h2>
                         </div>
                     </div>
                 </div>
@@ -102,7 +132,7 @@ if ($selected_navy === "NBN") {
                         <div class="card-body">
                             <h5 class="card-title">Events Attended</h5>
                             <hr>
-                            <h2>1020</h2>
+                            <h2>No Data Available in Testing</h2>
                         </div>
                     </div>
                 </div>
@@ -111,7 +141,7 @@ if ($selected_navy === "NBN") {
                         <div class="card-body">
                             <h5 class="card-title">Events Hosted</h5>
                             <hr>
-                            <h2>0</h2>
+                            <h2>No Data Available in Testing</h2>
                         </div>
                     </div>
                 </div>
@@ -120,7 +150,7 @@ if ($selected_navy === "NBN") {
                         <div class="card-body">
                             <h5 class="card-title">Promotion Date</h5>
                             <hr>
-                            <h2>12/10/2024</h2>
+                            <h2>No Data Available in Testing</h2>
                         </div>
                     </div>
                 </div>
