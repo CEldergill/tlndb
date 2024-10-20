@@ -17,6 +17,8 @@
     background-color: #f8f9fa;
     border: none;
     transition: all 0.3s ease;
+    width: 310px;
+    height: 330px;
 }
 
 .card:hover {
