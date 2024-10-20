@@ -128,7 +128,13 @@ $sql = "SELECT \n"
 
     . "GROUP BY \n"
 
-    . "    e.id, host.username, co_host.username, et.name, e.event_date, e.start_time, e.end_time, e.notes;";
+    . "    e.id, host.username, co_host.username, et.name, e.event_date, e.start_time, e.end_time, e.notes;\n"
+
+    . "ORDER BY \n"
+
+    . "    e.id";
+
+
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $faction_id);
@@ -146,6 +152,9 @@ $events_result = $stmt->get_result();
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 
 
     <link rel="stylesheet" href="view_events.css">
@@ -180,7 +189,6 @@ $events_result = $stmt->get_result();
                         $attendee_images = explode(",", $row['attendee_images']);
                         $attendee_ranks = explode(",", $row['attendee_ranks']);
 
-                        // Combine them into a JSON-like structure for easier handling in JavaScript
                         $attendees = [];
                         for ($i = 0; $i < count($attendee_names); $i++) {
                             $attendees[] = [
