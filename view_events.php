@@ -128,11 +128,11 @@ $sql = "SELECT \n"
 
     . "GROUP BY \n"
 
-    . "    e.id, host.username, co_host.username, et.name, e.event_date, e.start_time, e.end_time, e.notes;\n"
+    . "    e.id, host.username, co_host.username, et.name, e.event_date, e.start_time, e.end_time, e.notes\n"
 
     . "ORDER BY \n"
 
-    . "    e.id";
+    . "    e.id;";
 
 
 
