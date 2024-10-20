@@ -583,11 +583,11 @@ if ($event_types_result) {
             endMinutes += 24 * 60;
         }
 
-        // Check if the difference is within 20 hours
         const timeDifference = endMinutes - startMinutes;
 
-        if (timeDifference <= 20 * 60) {
-            proceed = confirm("The start time is potentially after the end time. Please double check and confirm if you are happy to continue.");;
+        // If `endTime` is before `startTime` or has a suspiciously large duration:
+        if (timeDifference > 24 * 60 || timeDifference < 0) {
+            proceed = confirm("The start time is potentially after the end time. Please double check and confirm if you are happy to continue.");
         }
 
         if (!proceed) {
