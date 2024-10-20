@@ -63,16 +63,6 @@ $pfp_link = $user['picture'];
         <img src="<?php echo $navy_img ?>" alt="Navy" width="100" height="60">
     </div>
 
-    <?php if ($id === '89370200') { ?>
-        <!-- Select Navy for moderators -->
-        <!-- <select class="form-select" id="navySelect" aria-label="Select Navy">
-            <option selected>Select Navy</option>
-            <option value="1">Nova Balreska</option>
-            <option value="2">Whitecrest Navy</option>
-        </select>
-        <input type="hidden" id="selectedNavy" name="selectedNavy" value=""> -->
-    <?php } ?>
-
     <!-- Navigation Options -->
     <ul class="nav nav-pills">
         <li class="nav-item">
@@ -87,8 +77,8 @@ $pfp_link = $user['picture'];
                 <li><a class="dropdown-item limited <?php echo ($activePage == 'view_events') ? 'active' : ''; ?>" href="view_events">View Event Logs</a></li>
             </ul>
         </li>
-        <li class="nav-item"><a href="#" class="nav-link limited disabled">War Eligibility</a></li>
         <li class="nav-item"><a href="#" class="nav-link limited disabled">HR Dashboard</a></li>
+        <li class="nav-item"><a href="#" class="nav-link limited disabled">War Eligibility</a></li>
         <li class="nav-item"><a href="#" class="nav-link limited disabled">Quota</a></li>
         <li class="nav-item"><a href="#" class="nav-link limited disabled">Medals</a></li>
         <li class="nav-item"><a href="logout" class="nav-link btn btn-danger">Logout</a></li>
@@ -136,28 +126,5 @@ $pfp_link = $user['picture'];
             // Also, add active class to the parent dropdown toggle
             $(this).closest('.dropdown').find('.dropdown-toggle').addClass('active');
         });
-
-        // $('#navySelect').change(function() {
-        //     var selectedValue = $(this).val(); // Get the selected value
-
-        //     // Check if a valid option is selected
-        //     if (selectedValue) {
-        //         $.ajax({
-        //             type: 'POST',
-        //             url: 'update_navy_option.php', // The PHP script to handle the request
-        //             data: {
-        //                 selectedNavy: selectedValue
-        //             }, // Data to send to the server
-        //             success: function(response) {
-        //                 // Handle the response from the PHP script
-        //                 console.log('Response from server:', response);
-        //             },
-        //             error: function(xhr, status, error) {
-        //                 // Handle errors here
-        //                 console.error('AJAX Error:', status, error);
-        //             }
-        //         });
-        //     }
-        // });
     });
 </script>

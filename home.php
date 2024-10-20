@@ -117,7 +117,7 @@ if ($date) {
                 <h3 class="fw-normal text-muted mb-3"><?php echo $rank . " " . $userName ?></h3>
             </div>
         </div>
-        <div class="container my-5">
+        <div class="container my-5 bg-body-tertiary">
             <div class="row text-center">
                 <div class="col-lg-3 col-md-6 mb-4">
                     <div class="card text-dark bg-light rounded shadow p-3 mb-5">
