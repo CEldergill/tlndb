@@ -64,6 +64,7 @@ if (isset($_SESSION['user'])) {
         <ul>
             <li>Roblox user ID</li>
             <li>Roblox username</li>
+            <li>Roblox Group Memberships</li>
         </ul>
         <p>We do not collect any other personal information unless voluntarily provided by the user.</p>
 

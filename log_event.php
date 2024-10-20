@@ -430,14 +430,14 @@ if ($event_types_result) {
     // Function to handle attendee selection
     function selectAttendee(id, attendee, rank, imgSrc) {
         const index = selectedAttendees.findIndex(att => att.username === attendee);
-        const host = document.getElementById('host');
-        const cohost = document.getElementById('cohost');
+        const host = document.getElementById('hostStyleCard').getAttribute('data-name');
+        const cohost = document.getElementById('cohostStyleCard')
         let cohostVal = "";
         if (cohost) {
-            cohostVal = cohost.value;
+            cohostVal = cohost.getAttribute('data-name');
         }
 
-        if (index === -1 && attendee !== host.value && attendee !== cohostVal) {
+        if (index === -1 && attendee !== host && attendee !== cohostVal) {
             // Add attendee if not already selected
             selectedAttendees.push({
                 id: id,

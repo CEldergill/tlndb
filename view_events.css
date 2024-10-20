@@ -131,3 +131,12 @@
         width: 8.33333%; /* Equivalent to col-1 */
     }
 }
+html,
+body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
