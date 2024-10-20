@@ -236,7 +236,7 @@ $events_result = $stmt->get_result();
         </div>
     </div>
 
-
+    <?php include_once("components/footer.html"); ?>
 
 </body>
 

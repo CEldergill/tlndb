@@ -317,6 +317,7 @@ if ($event_types_result) {
 
         </form>
     </div>
+    <?php include_once("components/footer.html"); ?>
 </body>
 <script>
     var selectedAttendees = [];
