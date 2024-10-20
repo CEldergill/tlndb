@@ -2,7 +2,7 @@
 
 $cron_secret = getenv('CRON_SECRET');
 
-if (!isset($_GET['key']) || $_GET['key'] !== $secretKey) {
+if (!isset($_GET['key']) || $_GET['key'] !== $cron_secret) {
     // If the key is invalid or not present, return a 403 Forbidden response
     header('HTTP/1.0 403 Forbidden');
     echo 'Access Denied';
