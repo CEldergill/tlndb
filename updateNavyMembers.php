@@ -80,14 +80,12 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
         $stmtAddMember = $conn->prepare("INSERT INTO members (id, username, rank_id, image_link, faction_id) VALUES (?, ?, ?, ?, ?)");
         $stmtAddRank = $conn->prepare("INSERT INTO rank_history (member_id, rank_id, effective_date) VALUES (?, ?, ?)");
 
-        print_r($userArray);
-
         foreach ($userArray as $user) {
             if ($user) {
-                $userid = $user[0];
-                $pfp = $user[1];
-                $username = $user[2];
-                $rank_id = $rank_mapping[$user[3]] ?? null;
+                $userid = $user['id'];
+                $pfp = $user['imageUrl'];
+                $username = $user[1];
+                $rank_id = $rank_mapping[$user[2]] ?? null;
 
                 $stmtAddMember->bind_param("isisi", $userid, $username, $rank_id, $pfp, $faction_id);
                 $stmtAddMember->execute();
