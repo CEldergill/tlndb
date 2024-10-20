@@ -65,12 +65,12 @@ $pfp_link = $user['picture'];
 
     <?php if ($id === '89370200') { ?>
         <!-- Select Navy for moderators -->
-        <select class="form-select" id="navySelect" aria-label="Select Navy">
+        <!-- <select class="form-select" id="navySelect" aria-label="Select Navy">
             <option selected>Select Navy</option>
             <option value="1">Nova Balreska</option>
             <option value="2">Whitecrest Navy</option>
         </select>
-        <input type="hidden" id="selectedNavy" name="selectedNavy" value="">
+        <input type="hidden" id="selectedNavy" name="selectedNavy" value=""> -->
     <?php } ?>
 
     <!-- Navigation Options -->
@@ -137,27 +137,27 @@ $pfp_link = $user['picture'];
             $(this).closest('.dropdown').find('.dropdown-toggle').addClass('active');
         });
 
-        $('#navySelect').change(function() {
-            var selectedValue = $(this).val(); // Get the selected value
+        // $('#navySelect').change(function() {
+        //     var selectedValue = $(this).val(); // Get the selected value
 
-            // Check if a valid option is selected
-            if (selectedValue) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'update_navy_option.php', // The PHP script to handle the request
-                    data: {
-                        selectedNavy: selectedValue
-                    }, // Data to send to the server
-                    success: function(response) {
-                        // Handle the response from the PHP script
-                        console.log('Response from server:', response);
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle errors here
-                        console.error('AJAX Error:', status, error);
-                    }
-                });
-            }
-        });
+        //     // Check if a valid option is selected
+        //     if (selectedValue) {
+        //         $.ajax({
+        //             type: 'POST',
+        //             url: 'update_navy_option.php', // The PHP script to handle the request
+        //             data: {
+        //                 selectedNavy: selectedValue
+        //             }, // Data to send to the server
+        //             success: function(response) {
+        //                 // Handle the response from the PHP script
+        //                 console.log('Response from server:', response);
+        //             },
+        //             error: function(xhr, status, error) {
+        //                 // Handle errors here
+        //                 console.error('AJAX Error:', status, error);
+        //             }
+        //         });
+        //     }
+        // });
     });
 </script>
