@@ -12,6 +12,7 @@ $client_id = getenv('CLIENT_ID');
 
 $activePage = 'home';
 require 'includes/token_manager.php';
+require 'includes/db.php';
 
 if (isset($_SESSION['access']['expiry']) && time() >= ($_SESSION['access']['expiry'] - 300)) {
     if (!refreshAccessToken($client_id, $client_secret)) {
