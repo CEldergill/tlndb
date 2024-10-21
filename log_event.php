@@ -254,9 +254,9 @@ if ($event_types_result) {
                             <h5 class="modal-title" id="attendeesModalLabel">Select Attendees</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="sticky-search-bar modal-body" style="height: 90%; overflow-y: auto;">
+                        <div class="modal-body" style="height: 90%; overflow-y: auto;">
                             <!-- Search Bar -->
-                            <div class="mb-3">
+                            <div class="sticky-search-bar mb-3">
                                 <input type="text" id="attendeeSearch" class="form-control" placeholder="Search for a username...">
                             </div>
                             <!-- Attendees Cards -->
