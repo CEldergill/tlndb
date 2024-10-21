@@ -14,40 +14,46 @@ function getNavyMembers($group_id)
     $roles = [
         // Nova Balreska
         [
-            19300797, // Crewman
-            19300794,
-            96490724,
-            48774876,
-            19300793,
-            20941943,
-            48774916,
-            19300792,
-            48774835,
-            19300786 // GSL
+            [19300797, "Crewman"],
+            [19300794, "Specialist"],
+            [96490724, "Midshipman"],
+            [48774876, "Lieutenant"],
+            [19300793, "Commander"],
+            [20941943, "Captain"],
+            [48774916, "Commodore"],
+            [19300792, "Vice Admiral"],
+            [48774835, "Admiral"],
+            [19300786, "GSL"]
         ],
         // Whitecrest
         [
-            17181336, // Crewman
-            18035409,
-            96490704,
-            17181412,
-            17178532,
-            18039682,
-            48660080,
-            17213973,
-            48772489,
-            17154517,
-            17129607 // King
+            [17181336, "Crewman"],
+            [18035409, "Specialist"],
+            [96490704, "Midshipman"],
+            [17181412, "Lieutenant"],
+            [17178532, "Commander"],
+            [18039682, "Captain"],
+            [48660080, "Commodore"],
+            [17213973, "Vice Admiral"],
+            [48772489, "Admiral"],
+            [17154517, "King"],
+            [17129607, "Grand Sea Lord"]
         ]
     ];
-    $excluded_roles = ['Citizen', 'Subject', 'Moderator', 'Nahr'];  // Roles to be excluded
+
+    $role_lookup = [];
+    foreach ($roles as $role_set) {
+        foreach ($role_set as $role) {
+            $role_lookup[$role[0]] = $role[1];  // Map roleId to role name
+        }
+    }
 
     // Initialize cURL
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_HTTPHEADER, ["Accept: application/json"]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    foreach ($roles[$navy_choice] as $roleid) {
+    foreach ($roles[$navy_choice][0] as $roleid) {
         $next_page_token = "";
         do {
             // API URL to fetch group members, limiting to 100 members per request. Starts at highest rank.
@@ -73,14 +79,12 @@ function getNavyMembers($group_id)
                 return false;
             }
 
-            print_r($members_data);
-
-            $fetched_members = array_map(function ($member) use ($roleid) {
-                $member['roleId'] = $roleid;
+            // Add role name to each member
+            $fetched_members = array_map(function ($member) use ($role_lookup) {
+                $roleId = $member['roleId'];
+                $member['role'] = isset($role_lookup[$roleId]) ? $role_lookup[$roleId] : 'Unknown'; // Add the role name
                 return $member;
             }, $members_data['data'] ?? []);
-
-            print_r($fetched_members);
 
             // Merge the retrieved members data
             $all_members = array_merge($all_members, $fetched_members ?? []);
@@ -92,20 +96,13 @@ function getNavyMembers($group_id)
     }
     curl_close($ch);  // Close the cURL handle
 
-    // Filter the members by excluding certain roles
     $user_list = [];
 
     print_r($all_members);
 
-    // Filter out excluded roles
-    $user_list = array_filter($all_members, function ($membership) use ($excluded_roles) {
-        return !in_array($membership['role'], $excluded_roles);
-    });
-
-    // Transform the filtered list to the desired structure
     $user_list = array_map(function ($membership) {
         return [(int)$membership['userId'], $membership['username'], $membership['role']];
-    }, $user_list);
+    }, $all_members);
 
     return !empty($user_list) ? $user_list : false;
 }
