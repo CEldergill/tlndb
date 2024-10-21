@@ -42,18 +42,5 @@ if (isset($_COOKIE['refresh_token'])) {
 session_unset();
 session_destroy(); // Destroy all session data
 
-if (ini_get("session.use_cookies")) {
-    $params = session_get_cookie_params();
-    setcookie(
-        session_name(),
-        '',
-        time() - 42000,
-        $params["path"],
-        $params["domain"],
-        $params["secure"],
-        $params["httponly"]
-    );
-}
-
 header("Location: index"); // Redirect to the login page
 exit();
