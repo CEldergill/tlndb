@@ -35,7 +35,7 @@ function getNavyMembers($group_id)
         }
 
         // Check the last role in the list to see if it is a citizen
-        $last_entry = end($members_data);
+        $last_entry = end($members_data['data']);
         print_r($last_entry);
         $last_role = $last_entry['role']['name'];
         if (in_array($last_role, ["Citizen", "Subject"])) {
