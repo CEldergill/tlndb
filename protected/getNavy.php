@@ -89,6 +89,8 @@ function getNavyMembers($group_id)
     // Filter the members by excluding certain roles
     $user_list = [];
 
+    print_r($all_members);
+
     // Filter out excluded roles
     $user_list = array_filter($all_members, function ($membership) use ($excluded_roles) {
         return !in_array($membership['role'], $excluded_roles);
