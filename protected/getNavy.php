@@ -77,7 +77,7 @@ function getNavyMembers($group_id)
             }, $members_data['data'] ?? []);
 
             // Merge the retrieved members data
-            $all_members = array_merge($all_members, $fetched_members ?? []);
+            $all_members = array_merge($all_members, $fetched_members['data'] ?? []);
 
             // Set the cursor for pagination
             $next_page_token = $members_data['nextPageCursor'] ?? "";
