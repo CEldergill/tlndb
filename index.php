@@ -2,6 +2,12 @@
 session_start();
 //header("Location: maintenance");
 
+// No login required if session already exists
+if (isset($_SESSION['user'])) {
+    header("Location: home");
+    exit();
+}
+
 if (isset($_SESSION['error'])) {
     $error_message = $_SESSION['error']; // Store the error message
     unset($_SESSION['error']); // Clear the error message after storing it
