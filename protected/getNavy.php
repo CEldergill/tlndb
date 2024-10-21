@@ -48,16 +48,17 @@ function getNavyMembers($group_id)
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
     foreach ($roles[$navy_choice] as $roleid) {
+        $next_page_token = "";
         do {
             // API URL to fetch group members, limiting to 100 members per request. Starts at highest rank.
-            $members_url = "https://groups.roblox.com/v1/groups/$group_id/roles/$roleid?limit=100&cursor=$next_page_token";
+            $members_url = "https://groups.roblox.com/v1/groups/$group_id/roles/$roleid/users?limit=100&cursor=$next_page_token";
             curl_setopt($ch, CURLOPT_URL, $members_url);
             echo "apiCall ";
 
             // Execute the request and handle errors
             $members_response = curl_exec($ch);
             if ($members_response === false) {
-                error_log('Curl error: ' . curl_error($ch));  // Use error_log instead of echoing
+                error_log('Curl error: ' . curl_error($ch));
                 curl_close($ch);
                 return false;
             }
@@ -68,6 +69,7 @@ function getNavyMembers($group_id)
             // Handle JSON decoding errors
             if ($members_data === null) {
                 error_log('Error decoding JSON: ' . json_last_error_msg());
+                curl_close($ch);
                 return false;
             }
 
