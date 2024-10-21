@@ -10,6 +10,19 @@
     background-color: #e9ecef;
 }
 
+#attendeesModal .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.search-container {
+    flex: 1; 
+    display: flex;
+    justify-content: center;
+}
+
 /* Modal Dialog Sizing */
 #attendeesModal .modal-dialog {
     width: var(--modal-width-large);
@@ -37,6 +50,10 @@
 /* Attendee Card Styling */
 #selectedAttendees .selected-attendee-card {
     min-height: 308px;
+}
+
+#attendeesModal #attendeeSearch {
+    max-width: 400px;
 }
 
 .card {

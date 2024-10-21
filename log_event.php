@@ -253,7 +253,7 @@ if ($event_types_result) {
                         <div class="modal-header">
                             <h5 class="modal-title" id="attendeesModalLabel">Select Attendees</h5>
                             <!-- Search Bar -->
-                            <div class="mb-3">
+                            <div class="search-container">
                                 <input type="text" id="attendeeSearch" class="form-control" placeholder="Search for a username...">
                             </div>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
