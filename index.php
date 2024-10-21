@@ -2,15 +2,18 @@
 session_start();
 //header("Location: maintenance");
 
+// checks for errors
+if (isset($_SESSION['error'])) {
+    $error_message = $_SESSION['error']; // Store the error message
+    unset($_SESSION['error']); // Clear the error message after storing it
+    session_destroy(); //if error then destroy session
+}
+
+
 // No login required if session already exists
 if (isset($_SESSION['user'])) {
     header("Location: home");
     exit();
-}
-
-if (isset($_SESSION['error'])) {
-    $error_message = $_SESSION['error']; // Store the error message
-    unset($_SESSION['error']); // Clear the error message after storing it
 }
 
 $selectedOption = isset($_SESSION['selected_navy']) ? $_SESSION['selected_navy'] : null;
