@@ -56,13 +56,11 @@ function getNavyMembers($group_id)
 
     foreach ($roles[$navy_choice] as $selected_role) {
         $roleid = $selected_role[0];
-        echo $roleid;
         $next_page_token = "";
         do {
             // API URL to fetch group members, limiting to 100 members per request. Starts at highest rank.
             $members_url = "https://groups.roblox.com/v1/groups/$group_id/roles/$roleid/users?limit=100&cursor=$next_page_token";
             curl_setopt($ch, CURLOPT_URL, $members_url);
-            echo "apiCall ";
 
             // Execute the request and handle errors
             $members_response = curl_exec($ch);
