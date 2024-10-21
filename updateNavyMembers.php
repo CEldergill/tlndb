@@ -149,7 +149,7 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
     }
 
     if (!empty($usersToRemove)) {
-        $stmtRemoveMember = $conn->prepare("UPDATE members SET rank_id = 1, join_date = NULL, promotion_date = NULL WHERE id = ?");
+        $stmtRemoveMember = $conn->prepare("UPDATE members SET rank_id = 1, join_date = NULL, promotion_date = NULL, faction_id = NULL WHERE id = ?");
         $stmtAddRank = $conn->prepare("INSERT INTO rank_history (member_id, rank_id, effective_date) VALUES (?, 1, ?)");
 
         foreach ($usersToRemove as $user) {
