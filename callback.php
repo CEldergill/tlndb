@@ -84,14 +84,14 @@ if (isset($_GET['code'])) {
         $user_result = $stmt->get_result();
 
         if ($user_result->num_rows > 0) {
-            $sql = "UPDATE tlndb_users SET last_login_date = CURRENT_TIMESTAMP() WHERE user_id = ?";
+            $sql = "UPDATE tlndb_users SET last_login_date = CURRENT_TIMESTAMP() WHERE id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $user_id);
             $stmt->execute();
         } else {
             $insertUser = $conn->prepare("INSERT INTO `tlndb_users`(`user_id`, `join_date`) VALUES (?,?)");
-            $stmtAddMember->bind_param("iS", $user_id, $effectiveDate);
-            $stmtAddMember->execute();
+            $insertUser->bind_param("iS", $user_id, $effectiveDate);
+            $insertUser->execute();
         }
 
         header("Location: groupcheck");
