@@ -53,7 +53,8 @@ function getNavyMembers($group_id)
     curl_setopt($ch, CURLOPT_HTTPHEADER, ["Accept: application/json"]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    foreach ($roles[$navy_choice][0] as $roleid) {
+    foreach ($roles[$navy_choice] as $selected_role) {
+        $roleid = $selected_role[0];
         $next_page_token = "";
         do {
             // API URL to fetch group members, limiting to 100 members per request. Starts at highest rank.
