@@ -6,6 +6,7 @@ session_start();
 if (isset($_SESSION['error'])) {
     $error_message = $_SESSION['error']; // Store the error message
     unset($_SESSION['error']); // Clear the error message after storing it
+    session_unset();
     session_destroy(); //if error then destroy session
 }
 

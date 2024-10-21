@@ -35,7 +35,7 @@ function refreshAccessToken($client_id, $client_secret)
                 'expires' => time() + (7 * 24 * 60 * 60), // 7 days
                 'path' => '/',
                 'domain' => '',
-                'secure' => false,
+                'secure' => true,
                 'httponly' => true,
                 'samesite' => 'Lax'
             ]);
