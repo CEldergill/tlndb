@@ -10,17 +10,26 @@
     background-color: #e9ecef;
 }
 
+/* Modal Header */
 #attendeesModal .modal-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+    gap: 10px; /* Ensure there's space between elements */
 }
 
+/* Centered Search Container */
 .search-container {
-    flex: 1; 
+    flex: 1; /* Take available space */
     display: flex;
-    justify-content: center;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+#attendeesModal #attendeeSearch {
+    max-width: 400px; /* Optional: Limit the width */
+    width: 100%; /* Take up full width within its container */
 }
 
 /* Modal Dialog Sizing */
@@ -50,10 +59,6 @@
 /* Attendee Card Styling */
 #selectedAttendees .selected-attendee-card {
     min-height: 308px;
-}
-
-#attendeesModal #attendeeSearch {
-    max-width: 400px;
 }
 
 .card {
