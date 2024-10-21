@@ -16,7 +16,7 @@ function getPfp($array)
 
         // Batch request to fetch multiple profile pictures at once
         $pfp_url = "https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=$userIds&size=420x420&format=Png&isCircular=false";
-        echo "apiCall";
+        echo "apiCall - getPfp";
 
         // Initialize cURL
         $ch = curl_init();
