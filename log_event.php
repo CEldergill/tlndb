@@ -1,5 +1,8 @@
 <?php
 session_start();
+
+date_default_timezone_set('America/New_York');
+
 if (!isset($_SESSION['user'])) {
     $_SESSION['error'] = "Not authenticated. Please retry.";
     header("Location: index");

@@ -2,6 +2,8 @@
 
 session_start();
 
+date_default_timezone_set('America/New_York');
+
 require 'includes/db.php';
 
 $client_secret = getenv('CLIENT_SECRET');

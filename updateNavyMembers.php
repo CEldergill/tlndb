@@ -1,6 +1,9 @@
 <?php
 
+date_default_timezone_set('America/New_York');
+
 $cron_secret = getenv('CRON_SECRET');
+
 
 if (!isset($_GET['key']) || $_GET['key'] !== $cron_secret) {
     header('HTTP/1.0 403 Forbidden');
