@@ -81,7 +81,6 @@ function getNavyMembers($group_id)
 
             // Add role name to each member
             $fetched_members = array_map(function ($member) use ($role_lookup) {
-                $roleId = $member['roleId'];
                 $member['role'] = isset($role_lookup[$roleId]) ? $role_lookup[$roleId] : 'Unknown'; // Add the role name
                 return $member;
             }, $members_data['data'] ?? []);
