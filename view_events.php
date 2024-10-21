@@ -123,6 +123,9 @@ $events_result = $stmt->get_result();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php safeEcho($selected_navy); ?> Events</title>
 
+    <link rel="icon" href="assets/TLLOGO.png"
+        type="image/x-icon" />
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
