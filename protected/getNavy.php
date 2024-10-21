@@ -8,7 +8,7 @@ function getNavyMembers($group_id)
 
     do {
         // API URL to fetch group members, limiting to 100 members per request. Starts at highest rank.
-        $members_url = "https://groups.roblox.com/v1/groups/$group_id/users?limit=100&sortOrder=Asc&cursor=$next_page_token&sortOrder=Desc";
+        $members_url = "https://groups.roblox.com/v1/groups/$group_id/users?limit=100&sortOrder=Desc&cursor=$next_page_token";
         echo "apiCall ";
         // Initialize cURL
         $ch = curl_init();
