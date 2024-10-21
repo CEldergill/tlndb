@@ -90,7 +90,7 @@ if (isset($_GET['code'])) {
             $stmt->execute();
         } else {
             $insertUser = $conn->prepare("INSERT INTO `tlndb_users`(`user_id`, `join_date`) VALUES (?,?)");
-            $insertUser->bind_param("iS", $user_id, $effectiveDate);
+            $insertUser->bind_param("is", $user_id, $effectiveDate);
             $insertUser->execute();
         }
 
