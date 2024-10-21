@@ -4,11 +4,12 @@ function getNavyMembers($group_id)
 {
     $all_members = [];
     $next_page_token = "";
+    $foundCitizen = false;
 
     do {
-        // API URL to fetch group members, limiting to 100 members per request
-        $members_url = "https://groups.roblox.com/v1/groups/$group_id/users?limit=100&sortOrder=Asc&cursor=$next_page_token";
-        echo "apiCall - getNavy";
+        // API URL to fetch group members, limiting to 100 members per request. Starts at highest rank.
+        $members_url = "https://groups.roblox.com/v1/groups/$group_id/users?limit=100&sortOrder=Asc&cursor=$next_page_token&sortOrder=Desc";
+        echo "apiCall ";
         // Initialize cURL
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $members_url);
@@ -36,9 +37,16 @@ function getNavyMembers($group_id)
         // Merge the retrieved members data
         $all_members = array_merge($all_members, $members_data['data'] ?? []);
 
+        // Check the last role in the list to see if it is a citizen
+        $last_role = $all_members[99]['role']['name'];
+        if (in_array($last_role, ["Citizen", "Subject"])) {
+            $foundCitizen = true;
+        }
+
         // Set the cursor for pagination
         $next_page_token = $members_data['nextPageCursor'] ?? "";
-    } while (!empty($next_page_token));
+        // Ends if a citizen is found.
+    } while (!empty($next_page_token) && !$foundCitizen);
 
     // Filter the members by excluding certain roles
     $user_list = [];
