@@ -1,4 +1,5 @@
 <?php
+session_start();
 //header("Location: maintenance");
 
 // checks for errors
@@ -14,8 +15,6 @@ if (isset($_SESSION['user'])) {
     header("Location: home");
     exit();
 }
-
-session_start();
 
 $selectedOption = isset($_SESSION['selected_navy']) ? $_SESSION['selected_navy'] : null;
 ?>
