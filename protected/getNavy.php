@@ -34,15 +34,16 @@ function getNavyMembers($group_id)
             return false;
         }
 
-        // Merge the retrieved members data
-        $all_members = array_merge($all_members, $members_data['data'] ?? []);
-
         // Check the last role in the list to see if it is a citizen
         $last_entry = end($members_data);
+        perint_r($last_entry);
         $last_role = $last_entry['role']['name'];
         if (in_array($last_role, ["Citizen", "Subject"])) {
             $foundCitizen = true;
         }
+
+        // Merge the retrieved members data
+        $all_members = array_merge($all_members, $members_data['data'] ?? []);
 
         // Set the cursor for pagination
         $next_page_token = $members_data['nextPageCursor'] ?? "";

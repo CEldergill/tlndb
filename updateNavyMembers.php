@@ -66,8 +66,6 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
     $usersToRemove = !empty($navyDbMembers)
         ? array_diff($navyDbMembers, $navyGroupMembers) : [];
 
-    print_r($usersToAdd);
-
     if (!empty($usersToAdd)) {
         $userArray = getPfp($usersToAdd);
         $groupMembersAssoc = array_column($navyFromGroup, null, 0);
