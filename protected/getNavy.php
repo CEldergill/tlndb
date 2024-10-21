@@ -55,6 +55,7 @@ function getNavyMembers($group_id)
 
     foreach ($roles[$navy_choice] as $selected_role) {
         $roleid = $selected_role[0];
+        echo $roleid;
         $next_page_token = "";
         do {
             // API URL to fetch group members, limiting to 100 members per request. Starts at highest rank.
@@ -81,8 +82,8 @@ function getNavyMembers($group_id)
             }
 
             // Add role name to each member
-            $fetched_members = array_map(function ($member) use ($role_lookup) {
-                $member['role'] = isset($role_lookup[$roleId]) ? $role_lookup[$roleId] : 'Unknown'; // Add the role name
+            $fetched_members = array_map(function ($member) use ($role_lookup, $roleid) {
+                $member['role'] = isset($role_lookup[$roleid]) ? $role_lookup[$roleid] : 'Unknown'; // Add the role name
                 return $member;
             }, $members_data['data'] ?? []);
 
