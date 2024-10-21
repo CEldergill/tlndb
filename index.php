@@ -9,7 +9,7 @@ if (isset($_SESSION['error'])) {
 }
 
 // No login required if session already exists
-if (isset($_SESSION['user'])) {
+if (isset($_SESSION['access'])) {
     header("Location: home");
     exit();
 }
