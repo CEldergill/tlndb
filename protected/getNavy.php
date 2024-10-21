@@ -5,6 +5,12 @@ function getNavyMembers($group_id)
     $all_members = [];
     $next_page_token = "";
 
+    if ($group_id === 2845412) {
+        $navy_choice = 1;
+    } else {
+        $navy_choice = 2;
+    }
+
     $roles = [
         // Nova Balreska
         [
@@ -41,7 +47,7 @@ function getNavyMembers($group_id)
     curl_setopt($ch, CURLOPT_HTTPHEADER, ["Accept: application/json"]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    foreach ($roles[$group_id] as $roleid) {
+    foreach ($roles[$navy_choice] as $roleid) {
         do {
             // API URL to fetch group members, limiting to 100 members per request. Starts at highest rank.
             $members_url = "https://groups.roblox.com/v1/groups/$group_id/roles/$roleid?limit=100&&cursor=$next_page_token";
