@@ -71,13 +71,17 @@ function getNavyMembers($group_id)
                 return false;
             }
 
+            print_r($members_data);
+
             $fetched_members = array_map(function ($member) use ($roleid) {
                 $member['roleId'] = $roleid;
                 return $member;
             }, $members_data['data'] ?? []);
 
+            print_r($fetched_members);
+
             // Merge the retrieved members data
-            $all_members = array_merge($all_members, $fetched_members['data'] ?? []);
+            $all_members = array_merge($all_members, $fetched_members ?? []);
 
             // Set the cursor for pagination
             $next_page_token = $members_data['nextPageCursor'] ?? "";
