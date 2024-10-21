@@ -2,9 +2,13 @@
 
 session_start();
 
+require 'includes/db.php';
+
 $client_secret = getenv('CLIENT_SECRET');
 $client_id = getenv('CLIENT_ID');
 $redirect_uri = 'https://www.tlndb.remote.ac/callback';
+
+$effectiveDate = date("Y-m-d H:i:s");
 
 if (isset($_GET['code'])) {
     $code = $_GET['code'];
@@ -65,6 +69,30 @@ if (isset($_GET['code'])) {
         }
 
         $_SESSION['user'] = array_merge($_SESSION['user'], $user_data);
+
+        // Record User Login
+
+        $user_id = $_SESSION['user']['sub'];
+
+        $sql = "SELECT id
+        FROM tlndb_users
+        WHERE id = ?;";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $user_id); // "i" indicates an integer
+        $stmt->execute();
+        $user_result = $stmt->get_result();
+
+        if ($user_result->num_rows > 0) {
+            $sql = "UPDATE tlndb_users SET last_login_date = CURRENT_TIMESTAMP() WHERE id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $user_id);
+            $stmt->execute();
+        } else {
+            $insertUser = $conn->prepare("INSERT INTO `tlndb_users`(`user_id`, `join_date`) VALUES (?,?)");
+            $stmtAddMember->bind_param("iS", $user_id, $effectiveDate);
+            $stmtAddMember->execute();
+        }
 
         header("Location: groupcheck");
         exit();
