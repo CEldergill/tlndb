@@ -61,13 +61,18 @@
     box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
 }
 .sticky-search-bar {
-    position: -webkit-sticky; /* For Safari */
-    position: sticky;
-    top: 0;
-    z-index: 10; /* Ensure it stays above other content when scrolling */
-    background-color: white; /* Match modal background to hide any gaps */
-    padding-top: 15px;
+    position: fixed;
+    top: 60px; 
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Ensure it's centered */
+    width: calc(var(--modal-width-large) - 40px); /* Make it fit nicely within the modal */
+    max-width: 90%; /* Prevent it from overflowing on smaller screens */
+    z-index: 1050; /* Ensure it stays above other elements */
+    background-color: white; /* Match the modal's background */
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
 }
+
 
 
 /* Responsive Adjustments */
