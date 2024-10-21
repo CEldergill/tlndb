@@ -15,29 +15,30 @@ function getNavyMembers($group_id)
         // Nova Balreska
         [
             [19300797, "Crewman"],
-            [19300794, "Specialist"],
-            [96490724, "Midshipman"],
-            [48774876, "Lieutenant"],
-            [19300793, "Commander"],
-            [20941943, "Captain"],
-            [48774916, "Commodore"],
-            [19300792, "Vice Admiral"],
-            [48774835, "Admiral"],
-            [19300786, "GSL"]
+            [19300794, "Able Crewman"],
+            [96490724, "Specialist"],
+            [48774876, "Midshipman"],
+            [19300793, "Lieutenant"],
+            [20941943, "Commander"],
+            [48774916, "Captain"],
+            [19300792, "Commodore"],
+            [48774835, "Vice Admiral"],
+            [19300786, "Admiral"],
+            [19300756, "Grand Sea Lord"]
         ],
         // Whitecrest
         [
             [17181336, "Crewman"],
-            [18035409, "Specialist"],
-            [96490704, "Midshipman"],
-            [17181412, "Lieutenant"],
-            [17178532, "Commander"],
-            [18039682, "Captain"],
-            [48660080, "Commodore"],
-            [17213973, "Vice Admiral"],
-            [48772489, "Admiral"],
-            [17154517, "King"],
-            [17129607, "Grand Sea Lord"]
+            [18035409, "Able Crewman"],
+            [96490704, "Specialist"],
+            [17181412, "Midshipman"],
+            [17178532, "Lieutenant"],
+            [18039682, "Commander"],
+            [48660080, "Captain"],
+            [17213973, "Commodore"],
+            [48772489, "Vice Admiral"],
+            [17154517, "Admiral"],
+            [17129607, "King"]
         ]
     ];
 
@@ -98,8 +99,6 @@ function getNavyMembers($group_id)
     curl_close($ch);  // Close the cURL handle
 
     $user_list = [];
-
-    print_r($all_members);
 
     $user_list = array_map(function ($membership) {
         return [(int)$membership['userId'], $membership['username'], $membership['role']];
