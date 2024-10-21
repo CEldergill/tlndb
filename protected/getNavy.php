@@ -6,9 +6,9 @@ function getNavyMembers($group_id)
     $next_page_token = "";
 
     if ($group_id === 2845412) {
-        $navy_choice = 1;
+        $navy_choice = 0;
     } else {
-        $navy_choice = 2;
+        $navy_choice = 1;
     }
 
     $roles = [
