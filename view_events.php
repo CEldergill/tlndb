@@ -125,14 +125,24 @@ $events_result = $stmt->get_result();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.jqueryui.min.css">
-    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.jqueryui.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
+    <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
 
     <link rel="stylesheet" href="view_events.css">
 </head>
 
 <body>
+
+    <script>
+        $(document).ready(function() {
+            new DataTable('#eventsTable', {
+                paging: true,
+                ordering: true,
+                info: true
+            });
+        });
+    </script>
+
 
     <?php include_once("components/nav.php"); ?>
 
@@ -140,7 +150,7 @@ $events_result = $stmt->get_result();
         <h1 class="text-center display-1">View Events</h1>
         <hr>
         <div class="table-responsive">
-            <table class="table table-bordered table-hover text-center">
+            <table id="eventsTable" class="table table-bordered table-hover text-center">
                 <thead class="thead-dark">
                     <tr>
                         <th>#</th>
@@ -226,14 +236,6 @@ $events_result = $stmt->get_result();
 </body>
 
 <script>
-    $(document).ready(function() {
-        $('.table').DataTable({
-            "paging": true,
-            "ordering": true,
-            "info": true
-        });
-    });
-
     document.addEventListener("DOMContentLoaded", function() {
         function showModal(content, type) {
             const modalContent = document.getElementById("modalContent");
