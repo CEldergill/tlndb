@@ -356,9 +356,11 @@ if ($event_types_result) {
     $('#attendeeSearch').on('keyup', function() {
         var value = $(this).val().toLowerCase();
         $('#attendeeCards .attendee-card').filter(function() {
-            $(this).toggle($(this).data('username').indexOf(value) > -1);
+            var username = $(this).data('username') || ""; // Ensure it's a string
+            $(this).toggle(username.toString().indexOf(value) > -1);
         });
     });
+
 
     // Background for Host & Co-Host to show they are not able to be selected.
     function applyHostCohostStyles() {
