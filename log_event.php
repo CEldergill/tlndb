@@ -355,8 +355,9 @@ if ($event_types_result) {
     // Search functionality for attendees
     $('#attendeeSearch').on('keyup', function() {
         var value = $(this).val().toLowerCase();
-        $('#attendeeCards .attendee-card').filter(function() {
-            $(this).toggle($(this).data('username').indexOf(value) > -1);
+        $('#attendeeCards .attendee-card').each(function() {
+            var username = $(this).data('username');
+            $(this).toggle(username.indexOf(value) > -1);
         });
     });
 
