@@ -1,8 +1,8 @@
 <?php
 session_start();
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['access']) || !isset($_SESSION['user'])) {
     $_SESSION['error'] = "Not authenticated. Please retry.";
-    header("Location: index.php");
+    header("Location: index");
     exit();
 }
 $activePage = 'view_events';

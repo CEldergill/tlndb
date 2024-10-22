@@ -2,7 +2,7 @@
 session_start();
 //header("Location: maintenance");
 
-// No login required if session already exists
+// No login required if session already exists and no error
 if (isset($_SESSION['access']) && !isset($_SESSION['error'])) {
     header("Location: home");
     exit();

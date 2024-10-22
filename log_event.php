@@ -3,11 +3,12 @@ session_start();
 
 date_default_timezone_set('America/New_York');
 
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['access']) || !isset($_SESSION['user'])) {
     $_SESSION['error'] = "Not authenticated. Please retry.";
     header("Location: index");
     exit();
 }
+
 $activePage = 'log_event';
 require 'includes/token_manager.php';
 require 'includes/db.php';

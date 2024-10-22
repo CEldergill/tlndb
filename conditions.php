@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION['user'])) {
+if (isset($_SESSION['user']) && isset($_SESSION['access'])) {
     require 'includes/token_manager.php';
 
     $client_secret = getenv('CLIENT_SECRET');
