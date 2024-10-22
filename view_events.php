@@ -126,7 +126,7 @@ $events_result = $stmt->get_result();
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.jqueryui.min.css">
-    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.jqueryui.min.js"></script>
 
 
     <link rel="stylesheet" href="view_events.css">
