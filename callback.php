@@ -6,7 +6,7 @@ date_default_timezone_set('America/New_York');
 
 $client_secret = getenv('CLIENT_SECRET');
 $client_id = getenv('CLIENT_ID');
-$redirect_uri = 'https://www.tlndb.remote.ac/callback';
+$redirect_uri = 'https://' . $_SERVER['HTTP_HOST'] . '/callback.php';
 
 $effectiveDate = date("Y-m-d H:i:s");
 
