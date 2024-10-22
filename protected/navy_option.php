@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
+    http_response_code(403);
+    echo "Access denied";
+    exit;
+}
 if (!isset($_SESSION['user'])) {
     $_SESSION['user'] = []; // Initialize if not set
 }
