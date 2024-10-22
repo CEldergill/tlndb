@@ -84,6 +84,10 @@ $selectedOption = isset($_SESSION['selected_navy']) ? $_SESSION['selected_navy']
                 $('#loginButton').prop('disabled', !selectedNavy); // Enable the login button only if a navy option is selected
             });
 
+
+            $('#loginButton').prop('disabled', true);
+
+
             // Handle login button click
             $('#loginButton').click(function() {
                 if (selectedNavy) {
@@ -92,11 +96,11 @@ $selectedOption = isset($_SESSION['selected_navy']) ? $_SESSION['selected_navy']
                             selected_navy: selectedNavy
                         })
                         .done(function(response) {
-                            // Handle successful response if needed
+                            $('#loginButton').prop('disabled', false); // Enable the button on success
                             console.log('Success:', response);
                         })
                         .fail(function(jqXHR, textStatus, errorThrown) {
-                            // Handle error
+                            $('#loginButton').prop('disabled', false);
                             console.error('Error:', textStatus, errorThrown);
                             alert('An error occurred while processing your request. Please try again.');
                         });
