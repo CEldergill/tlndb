@@ -120,12 +120,6 @@ $cards = [
             </div>
         </section>
 
-        <section class="text-center d-flex justify-content-center align-items-center" style="height: 20vh;">
-            <div class="container">
-                <h4 class="display-3 fw-bold">You are eligible for promotion.</h1>
-            </div>
-        </section>
-
     </main>
 
     <?php include_once("components/footer.html"); ?>
