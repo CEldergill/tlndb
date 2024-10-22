@@ -2,6 +2,8 @@
 
 session_start();
 
+require 'includes/db.php';
+
 if (!isset($_SESSION['user'])) {
     // If no user data is found in the session, redirect to the login page
     $_SESSION['error'] = "No user data retrieved. Please retry.";
@@ -122,6 +124,28 @@ if (!$user_in_group) {
     header("Location: index");
 } else {
     unset($_SESSION['error']);
+
+    $user_id = $_SESSION['user']['sub'];
+
+    $sql = "SELECT user_id
+    FROM tlndb_users
+    WHERE user_id = ?;";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id); // "i" indicates an integer
+    $stmt->execute();
+    $user_result = $stmt->get_result();
+
+    if ($user_result->num_rows > 0) {
+        $sql = "UPDATE tlndb_users SET last_login_date = CURRENT_TIMESTAMP() WHERE user_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+    } else {
+        $insertUser = $conn->prepare("INSERT INTO `tlndb_users`(`user_id`, `join_date`) VALUES (?,?)");
+        $insertUser->bind_param("is", $user_id, $effectiveDate);
+        $insertUser->execute();
+    }
     header("Location: home");
 }
 

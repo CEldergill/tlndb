@@ -2,16 +2,16 @@
 session_start();
 //header("Location: maintenance");
 
+// No login required if session already exists
+if (isset($_SESSION['access']) && !isset($_SESSION['error'])) {
+    header("Location: home");
+    exit();
+}
+
 // checks for errors
 if (isset($_SESSION['error'])) {
     $error_message = $_SESSION['error']; // Store the error message
     unset($_SESSION['error']); // Clear the error message after storing it
-}
-
-// No login required if session already exists
-if (isset($_SESSION['access'])) {
-    header("Location: home");
-    exit();
 }
 
 $selectedOption = isset($_SESSION['selected_navy']) ? $_SESSION['selected_navy'] : null;
