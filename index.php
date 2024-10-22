@@ -92,7 +92,7 @@ $selectedOption = isset($_SESSION['selected_navy']) ? $_SESSION['selected_navy']
             $('#loginButton').click(function() {
                 if (selectedNavy) {
                     // Store the selected option in a session variable via AJAX
-                    $.post('navy_option.php', {
+                    $.post('protected/navy_option.php', {
                             selected_navy: selectedNavy
                         })
                         .done(function(response) {
