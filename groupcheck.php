@@ -18,6 +18,8 @@ $user = $_SESSION['user'];
 $id = $user['sub'];
 $selected_navy = $user['selected_navy'];
 
+$effectiveDate = date("Y-m-d H:i:s");
+
 $nova_roles = [
     [19300797, "Crewman"],
     [19300794, "Able Crewman"],
