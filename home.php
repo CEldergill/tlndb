@@ -91,12 +91,12 @@ $cards = [
     <link rel="stylesheet" href="home.css">
 </head>
 
-<body>
+<body class="bg-body-tertiary">
     <?php include_once("components/nav.php"); ?>
 
     <main>
         <!-- Header Section -->
-        <section class="header-section text-center bg-body-tertiary py-5" style="height: 20vh;">
+        <section class="header-section text-center py-5" style="height: 20vh;">
             <div class="container">
                 <h1 class="display-3 fw-bold">Welcome to the <?php safeEcho($navy); ?> Navy Dashboard</h1>
                 <h3 class="fw-normal text-muted mb-3"><?php echo $rank . " " . $userName; ?></h3>
@@ -120,7 +120,7 @@ $cards = [
             </div>
         </section>
 
-        <section class="text-center bg-body-tertiary d-flex justify-content-center align-items-center" style="height: 20vh;">
+        <section class="text-center d-flex justify-content-center align-items-center" style="height: 20vh;">
             <div class="container">
                 <h4 class="display-3 fw-bold">You are eligible for promotion.</h1>
             </div>
