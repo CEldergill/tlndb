@@ -1,18 +1,14 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['access']) || !isset($_SESSION['user'])) {
-    $_SESSION['error'] = "Not authenticated. Please retry.";
-    header("Location: index");
-    exit();
-}
+require 'includes/session.php';
+require 'includes/token_manager.php';
+require 'includes/db.php';
 
 $client_secret = getenv('CLIENT_SECRET');
 $client_id = getenv('CLIENT_ID');
 
 $activePage = 'home';
-require 'includes/token_manager.php';
-require 'includes/db.php';
 
 // Refresh the access token if it's about to expire
 if (isset($_SESSION['access']['expiry']) && time() >= ($_SESSION['access']['expiry'] - 300)) {

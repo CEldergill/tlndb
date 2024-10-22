@@ -1,13 +1,9 @@
 <?php
 session_start();
-if (!isset($_SESSION['access']) || !isset($_SESSION['user'])) {
-    $_SESSION['error'] = "Not authenticated. Please retry.";
-    header("Location: index");
-    exit();
-}
-$activePage = 'view_events';
+require 'includes/session.php';
 require 'includes/token_manager.php';
 require 'includes/db.php';
+$activePage = 'view_events';
 
 $client_secret = getenv('CLIENT_SECRET');
 $client_id = getenv('CLIENT_ID');
