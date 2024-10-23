@@ -50,13 +50,13 @@ if ($rank === "Crewman" || $rank == "Able Crewman" || $rank == "Specialist") {
     exit();
 }
 
+$selected_navy = "WCN";
+
 if ($selected_navy === "NBN") {
     $faction_id  = 1;
 } else {
     $faction_id = 2;
 }
-
-$selected_navy = "WCN";
 
 // Get Users for Attendees Modal
 
