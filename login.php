@@ -1,7 +1,7 @@
 <?php
 session_start();
 $client_id = getenv('CLIENT_ID');
-$redirect_uri = 'https://' . $_SERVER['HTTP_HOST'] . '/callback.php';
+$redirect_uri = 'http://localhost/callback.php';
 $state = bin2hex(random_bytes(16)); // CSRF protection
 
 // Redirect to Roblox OAuth 2.0 authorization endpoint

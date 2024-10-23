@@ -94,7 +94,7 @@ $group_response = curl_exec($ch);
 
 if ($group_response === false) {
     $_SESSION['error'] = 'Curl error: ' . curl_error($ch);
-    header("Location: index");
+    header("Location: index.php");
     exit();
 }
 
@@ -102,7 +102,7 @@ $group_data = json_decode($group_response, true);
 
 if ($group_data === null) {
     $_SESSION['error'] = 'Error decoding JSON: ' . json_last_error_msg();
-    header("Location: index");
+    header("Location: index.php");
     exit();
 }
 
@@ -123,7 +123,7 @@ if (!empty($group_data['groupMemberships'])) {
 
 if (!$user_in_group) {
     $_SESSION['error'] = "You must be a navy member to access this page.";
-    header("Location: index");
+    header("Location: index.php");
 } else {
     unset($_SESSION['error']);
 
@@ -148,7 +148,7 @@ if (!$user_in_group) {
         $insertUser->bind_param("is", $user_id, $effectiveDate);
         $insertUser->execute();
     }
-    header("Location: home");
+    header("Location: home.php");
 }
 
 curl_close($ch);

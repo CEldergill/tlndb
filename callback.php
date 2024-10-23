@@ -6,7 +6,7 @@ date_default_timezone_set('America/New_York');
 
 $client_secret = getenv('CLIENT_SECRET');
 $client_id = getenv('CLIENT_ID');
-$redirect_uri = 'https://' . $_SERVER['HTTP_HOST'] . '/callback.php';
+$redirect_uri = 'http://localhost/callback.php';
 
 $effectiveDate = date("Y-m-d H:i:s");
 
@@ -65,20 +65,20 @@ if (isset($_GET['code'])) {
 
         if (!isset($_SESSION['user']['selected_navy'])) {
             $_SESSION['error'] = "Error: Unable to get access token.";
-            header("Location: index");
+            header("Location: index.php");
         }
 
         $_SESSION['user'] = array_merge($_SESSION['user'], $user_data);
 
-        header("Location: groupcheck");
+        header("Location: groupcheck.php");
         exit();
     } else {
         $_SESSION['error'] = "Error: Unable to get access token.";
-        header("Location: index");
+        header("Location: index.php");
         exit();
     }
 } else {
     $_SESSION['error'] = "Error: No authorization code provided.";
-    header("Location: index");
+    header("Location: index.php");
     exit();
 }

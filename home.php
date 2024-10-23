@@ -14,7 +14,7 @@ $activePage = 'home';
 if (isset($_SESSION['access']['expiry']) && time() >= ($_SESSION['access']['expiry'] - 300)) {
     if (!refreshAccessToken($client_id, $client_secret)) {
         $_SESSION['error'] = "Error: Unable to refresh access token.";
-        header("Location: index");
+        header("Location: index.php");
         exit();
     }
 }
@@ -43,7 +43,7 @@ if (isset($navies[$selected_navy])) {
     [$navy, $navy_img] = $navies[$selected_navy];
 } else {
     $_SESSION['error'] = "No navy authenticated. Please retry.";
-    header("Location: index");
+    header("Location: index.php");
     exit();
 }
 

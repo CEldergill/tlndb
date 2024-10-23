@@ -73,15 +73,15 @@ $pfp_link = $user['picture'];
                 Event Logs
             </button>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item limited <?php echo ($activePage == 'log_event') ? 'active' : ''; ?>" href="log_event">Submit Event Log</a></li>
-                <li><a class="dropdown-item limited <?php echo ($activePage == 'view_events') ? 'active' : ''; ?>" href="view_events">View Event Logs</a></li>
+                <li><a class="dropdown-item limited <?php echo ($activePage == 'log_event.php') ? 'active' : ''; ?>" href="log_event">Submit Event Log</a></li>
+                <li><a class="dropdown-item limited <?php echo ($activePage == 'view_events.php') ? 'active' : ''; ?>" href="view_events">View Event Logs</a></li>
             </ul>
         </li>
         <li class="nav-item"><a href="#" class="nav-link limited disabled">HR Dashboard</a></li>
         <li class="nav-item"><a href="#" class="nav-link limited disabled">War Eligibility</a></li>
         <li class="nav-item"><a href="#" class="nav-link limited disabled">Quota</a></li>
         <li class="nav-item"><a href="#" class="nav-link limited disabled">Medals</a></li>
-        <li class="nav-item"><a href="logout" class="nav-link btn btn-danger">Logout</a></li>
+        <li class="nav-item"><a href="logout.php" class="nav-link btn btn-danger">Logout</a></li>
     </ul>
 
     <!-- Profile Picture -->
