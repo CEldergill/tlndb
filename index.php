@@ -12,6 +12,8 @@ if (isset($_SESSION['access']) && !isset($_SESSION['error'])) {
 if (isset($_SESSION['error'])) {
     $error_message = $_SESSION['error']; // Store the error message
     unset($_SESSION['error']); // Clear the error message after storing it
+    session_unset();
+    session_destroy(); // Destroy all session data
 }
 
 $selectedOption = isset($_SESSION['selected_navy']) ? $_SESSION['selected_navy'] : null;
