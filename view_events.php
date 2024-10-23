@@ -56,6 +56,8 @@ if ($selected_navy === "NBN") {
     $faction_id = 2;
 }
 
+$selected_navy = "WCN";
+
 // Get Users for Attendees Modal
 
 $sql = "SELECT m.username, r.name, m.image_link

@@ -47,8 +47,6 @@ if (isset($navies[$selected_navy])) {
     exit();
 }
 
-$selected_navy = "WCN";
-
 // Calculate Days in Navy
 $sql = "SELECT m.join_date FROM members AS m WHERE m.id = ?";
 $stmt = $conn->prepare($sql);
