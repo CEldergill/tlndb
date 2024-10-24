@@ -50,8 +50,6 @@ if ($rank === "Crewman" || $rank == "Able Crewman" || $rank == "Specialist") {
     exit();
 }
 
-$selected_navy = "WCN";
-
 if ($selected_navy === "NBN") {
     $faction_id  = 1;
 } else {
