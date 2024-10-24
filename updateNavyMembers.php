@@ -63,8 +63,12 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
     $usersToAdd = !empty($navyGroupMembers)
         ? array_diff($navyGroupMembers, $allFromDb) : [];
 
+    print_r($usersToAdd);
+
     $usersToAmmend = !empty($navyGroupMembers)
         ? array_intersect($navyGroupMembers, $citizensFromDb) : [];
+
+    print_r($usersToAmmend);
 
     $usersToRemove = !empty($navyDbMembers)
         ? array_diff($navyDbMembers, $navyGroupMembers) : [];
