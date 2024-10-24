@@ -8,7 +8,7 @@ function navyFromDb($conn, $faction_id)
         ORDER BY r.id Desc";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $faction_id);
+    $stmt->bind_param("i", $faction_id);
     $stmt->execute();
     $all_users_result = $stmt->get_result();
 
