@@ -49,16 +49,15 @@ function allFromDb($conn, $faction_id)
     }
 }
 
-function citizenFromDb($conn, $faction_id)
+function citizenFromDb($conn)
 {
     $sql = "SELECT m.id
         FROM members AS m 
         JOIN rank AS r ON m.rank_id = r.id 
-        WHERE m.faction_id = ? AND m.rank_id = 1
+        WHERE m.rank_id = 1
         ORDER BY r.id Desc";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $faction_id);
     $stmt->execute();
     $all_users_result = $stmt->get_result();
 
