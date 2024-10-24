@@ -36,15 +36,14 @@ $rank_mapping = [
 $navy_to_process = isset($_GET['navy']) ? strtolower($_GET['navy']) : null;
 
 $navies = [
-    'nbn' => ['group_id' => 2845412, 'faction_id' => 1, 'citizen_id' => 19300757], // NBN
-    'wcn' => ['group_id' => 2587871, 'faction_id' => 2, 'citizen_id' => 17129601]  // WCN
+    'nbn' => ['group_id' => 2845412, 'faction_id' => 1], // NBN
+    'wcn' => ['group_id' => 2587871, 'faction_id' => 2]  // WCN
 ];
 
 if ($navy_to_process && isset($navies[$navy_to_process])) {
     $navy = $navies[$navy_to_process];
     $group_id = $navy['group_id'];
     $faction_id = $navy['faction_id'];
-    $citizen_id = $navy['citizen_id'];
 
     // Accesses group members
     $navyFromGroup = getNavyMembers($group_id);
@@ -55,8 +54,8 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
         return [$user[0], $rank_mapping[$user[2]] ?? null];
     }, $navyFromGroup);
 
-    $citizensFromDb = citizenFromDb($conn, $faction_id, $citizen_id);
-    $navyFromDb = navyFromDb($conn, $faction_id, $citizen_id);
+    $citizensFromDb = citizenFromDb($conn, $faction_id);
+    $navyFromDb = navyFromDb($conn, $faction_id);
     $navyDbMembers = array_column($navyFromDb, 0);
     $allFromDb = allFromDb($conn, $faction_id);
 
