@@ -120,12 +120,12 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
             return ['user_id' => $userId, 'new_rank_id' => 2]; // Crewman rank
         }, $usersToAmmend);
 
-        $stmtUpdateMember = $conn->prepare("UPDATE members SET rank_id = ?, join_date = ?, promotion_date = NULL WHERE id = ?");
+        $stmtUpdateMember = $conn->prepare("UPDATE members SET rank_id = ?, join_date = ?, promotion_date = NULL, faction_id = ? WHERE id = ?");
         $stmtAddRank = $conn->prepare("INSERT INTO rank_history (member_id, rank_id, effective_date) VALUES (?, ?, ?)");
 
         foreach ($usersRankToAmend as $user) {
             $joinDate = date("Y-m-d H:i:s");
-            $stmtUpdateMember->bind_param("isi", $user['new_rank_id'], $joinDate, $user['user_id']);
+            $stmtUpdateMember->bind_param("isii", $user['new_rank_id'], $joinDate, $user['user_id'], $faction_id);
             $stmtUpdateMember->execute();
 
             $stmtAddRank->bind_param("iis", $user['user_id'], $user['new_rank_id'], $joinDate);
