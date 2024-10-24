@@ -84,7 +84,7 @@ if ($navy_to_process && isset($navies[$navy_to_process])) {
         $stmtAddRank = $conn->prepare("INSERT INTO rank_history (member_id, rank_id, effective_date) VALUES (?, ?, ?)");
 
         foreach ($userArray as $user) {
-            if ($user) {
+            if ($user && !in_array($user['id'], $usersToAmmend)) {
                 $userid = $user['id'];
                 $pfp = $user['imageUrl'];
                 $username = $user[1];
